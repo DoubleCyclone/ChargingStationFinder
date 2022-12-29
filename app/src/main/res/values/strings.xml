@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Charging Station Finder</string>
+    <string name="student_id">1902317</string>
+    <string name="searchTitle">Search Charging Stations</string>
+    <string name="logout">Log Out</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mapTitle">Charging Stations</string>
+    <string name="detailsTitle">Location Details</string>
+</resources>
