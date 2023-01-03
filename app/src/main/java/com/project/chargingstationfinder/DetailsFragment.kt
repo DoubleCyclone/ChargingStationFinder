@@ -15,7 +15,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentDetailsBinding.inflate(layoutInflater)
         return binding.root
@@ -34,10 +34,5 @@ class DetailsFragment : Fragment() {
 
     private fun detailsToMap() {
         findNavController().navigate(R.id.action_detailsFragment_to_mapFragment)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = SearchFragment()
     }
 }

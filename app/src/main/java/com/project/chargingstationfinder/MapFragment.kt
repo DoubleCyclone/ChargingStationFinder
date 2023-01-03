@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
-import com.project.chargingstationfinder.databinding.FragmentSearchBinding
 
 class MapFragment : Fragment() {
 
@@ -16,7 +15,7 @@ class MapFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentMapBinding.inflate(layoutInflater)
         return binding.root
@@ -28,7 +27,7 @@ class MapFragment : Fragment() {
     }
 
     private fun setListeners() {
-        binding.toDetailsbtn.setOnClickListener{
+        binding.toDetailsbtn.setOnClickListener {
             mapToDetails()
         }
     }
@@ -37,8 +36,4 @@ class MapFragment : Fragment() {
         findNavController().navigate(R.id.action_mapFragment_to_detailsFragment)
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = SearchFragment()
-    }
 }

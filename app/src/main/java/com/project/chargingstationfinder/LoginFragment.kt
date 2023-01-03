@@ -20,7 +20,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(layoutInflater)
         return binding.root
@@ -55,10 +55,5 @@ class LoginFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         AGConnectApi.getInstance().activityLifecycle()
             .onActivityResult(requestCode, resultCode, data)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = LoginFragment()
     }
 }

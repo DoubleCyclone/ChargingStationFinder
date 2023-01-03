@@ -1,23 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SearchFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/searchTitle" />
+        android:id="@+id/welcomeUsertv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcomeUserTv"
+        app:layout_constraintBottom_toTopOf="@id/countriestv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/countriestv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="@string/countryTv"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/countriesSpinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.085"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/welcomeUsertv" />
+
+    <TextView
+        android:id="@+id/countryCodeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:text="@string/countryCodeTv"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/countriesSpinner"
+        app:layout_constraintEnd_toStartOf="@id/countriesSpinner"
+        app:layout_constraintStart_toStartOf="@+id/countriestv"
+        app:layout_constraintTop_toTopOf="@id/countriesSpinner"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Spinner
+        android:id="@+id/countriesSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginStart="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/countryCodeTv"
+        app:layout_constraintTop_toBottomOf="@id/welcomeUsertv"
+        app:layout_constraintVertical_bias="0.104" />
+
+
+    <TextView
+        android:id="@+id/TownTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:text="@string/townTv"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countryCodeTv" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edittext_background"
+        android:gravity="center_vertical"
+        android:minWidth="270dp"
+        app:boxBackgroundMode="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.278"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TownTv">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autofillHints="none"
+            android:hint="@string/townTv"
+            android:inputType="text"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/locationTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/locationTv"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <TextView
+        android:id="@+id/latitudeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/latitudeTv"
+        app:layout_constraintEnd_toEndOf="@+id/locationTv"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toStartOf="@+id/locationTv"
+        app:layout_constraintTop_toBottomOf="@+id/locationTv" />
+
+    <TextView
+        android:id="@+id/latitudeNumberTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/zero"
+        app:layout_constraintBottom_toTopOf="@+id/longitudeTv"
+        app:layout_constraintEnd_toEndOf="@+id/locationTv"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/latitudeTv"
+        app:layout_constraintTop_toBottomOf="@+id/locationTv" />
+
+    <TextView
+        android:id="@+id/longitudeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/longitudeTv"
+        app:layout_constraintEnd_toEndOf="@+id/locationTv"
+        app:layout_constraintHorizontal_bias="0.235"
+        app:layout_constraintStart_toStartOf="@+id/locationTv"
+        app:layout_constraintTop_toBottomOf="@+id/latitudeTv" />
+
+    <TextView
+        android:id="@+id/longitudeNumberTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/zero"
+        app:layout_constraintEnd_toEndOf="@+id/locationTv"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/longitudeTv"
+        app:layout_constraintTop_toBottomOf="@+id/latitudeNumberTv" />
+
+    <TextView
+        android:id="@+id/clearTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/clearTv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.622"
+        app:layout_constraintStart_toEndOf="@+id/locationTv"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+    <ImageButton
+        android:id="@+id/clearBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:contentDescription="@string/gpsBtn"
+        android:src="@drawable/gps"
+        app:layout_constraintEnd_toEndOf="@+id/clearTv"
+        app:layout_constraintHorizontal_bias="0.444"
+        app:layout_constraintStart_toStartOf="@+id/clearTv"
+        app:layout_constraintTop_toBottomOf="@+id/clearTv" />
+
     <Button
         android:id="@+id/toMapbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TO MAP"
-        app:layout_constraintTop_toTopOf="parent"
+        android:minWidth="300dp"
+        android:text="@string/searchBtn"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/longitudeTv" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

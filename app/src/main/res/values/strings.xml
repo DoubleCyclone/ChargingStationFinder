@@ -6,4 +6,22 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="mapTitle">Charging Stations</string>
     <string name="detailsTitle">Location Details</string>
+    <string name="countryTv">Country</string>
+    <string name="countryCodeTv">Country Code</string>
+    <string name="townTv">Town</string>
+    <string name="locationTv">Location</string>
+    <string name="latitudeTv">Latitude</string>
+    <string name="longitudeTv">Longitude</string>
+    <string name="clearTv">Clear</string>
+    <string name="searchBtn">SEARCH</string>
+    <string name="welcomeUserTv">Welcome</string>
+    <string name="zero">0.0</string>
+    <string name="gpsBtn">GPS Button</string>
+
+
+    <string-array name="countries_array">
+        <item>Turkey</item>
+        <item>China</item>
+        <item>Germany</item>
+    </string-array>
 </resources>
