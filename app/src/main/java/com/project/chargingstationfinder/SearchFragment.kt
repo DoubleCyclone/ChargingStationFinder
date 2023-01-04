@@ -34,9 +34,9 @@ class SearchFragment : Fragment() {
 
     //location kit
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private val mLocationRequest = LocationRequest()
+    private var mLocationRequest = LocationRequest()
     private lateinit var mLocationCallback: LocationCallback
-    private val settingsClient : SettingsClient = LocationServices.getSettingsClient(context)
+
     //private lateinit var settingsClient : SettingsClient
 
 
@@ -89,7 +89,8 @@ class SearchFragment : Fragment() {
     private fun setListeners() {
         binding.toMapbtn.setOnClickListener {
             //searchToMap()
-            requestLocationUpdates()
+            //requestLocationUpdates()
+            requestUpdate()
         }
         binding.clearBtn.setOnClickListener {
             removeLocationUpdates()
@@ -115,71 +116,97 @@ class SearchFragment : Fragment() {
         }
     }
 
-
-    private fun requestLocationUpdates() {
-        try {
-            val builder = LocationSettingsRequest.Builder()
-            builder.addLocationRequest(mLocationRequest)
-            val locationSettingsRequest = builder.build()
-                // Check the device location settings.
-            settingsClient.checkLocationSettings(locationSettingsRequest)
-                // Define the listener for success in calling the API for checking device location settings.
-                .addOnSuccessListener { locationSettingsResponse ->
-                    val locationSettingsStates = locationSettingsResponse.locationSettingsStates
-                    val stringBuilder = StringBuilder()
-                    // Check whether the location function is enabled.
-                    stringBuilder.append("isLocationUsable=")
-                        .append(locationSettingsStates.isLocationUsable)
-                    // Check whether HMS Core (APK) is available.
-                    stringBuilder.append(",\nisHMSLocationUsable=")
-                        .append(locationSettingsStates.isHMSLocationUsable)
-                    Log.i(TAG, "checkLocationSetting onComplete:$stringBuilder")
-                }
-                // Define callback for failure in checking the device location settings.
-                .addOnFailureListener(OnFailureListener { e ->
-                    Log.i(TAG, "checkLocationSetting onFailure:" + e.message)
-                })
-            /*var builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
-            builder.addLocationRequest(mLocationRequest)
-            var locationSettingsRequest: LocationSettingsRequest = builder.build()
-
-            settingsClient.checkLocationSettings(locationSettingsRequest)
-                .addOnSuccessListener {
-                    Log.i(TAG, "check location settings success")
-                    fusedLocationProviderClient.requestLocationUpdates(
-                        mLocationRequest, mLocationCallback,
-                        Looper.getMainLooper()
-                    ).addOnSuccessListener {
-                        HMSLocationLog.i(TAG, "requestLocationUpdatesWithCallback onSuccess", "")
-                    }.addOnFailureListener {
-                        Log.e(TAG, "requestLocationUpdatesWithCallback onFailure:" + it.message)
-                    }
-                }
-                // Define callback for failure in checking the device location settings.
-                .addOnFailureListener {
-                    Log.e(TAG, "checkLocationSetting onFailure:" + it.message)
-                }*/
-        } catch (e: java.lang.Exception) {
-            HMSLocationLog.e(TAG, "requestLocationUpdatesWithCallback exception" + e.message, "")
-        }
-        /*fusedLocationProviderClient.requestLocationUpdates(
-            mLocationRequest,
-            mLocationCallback,
-            Looper.getMainLooper()
-        )
-            ?.addOnSuccessListener {
-                Toast.makeText(
-                    activity,
-                    "Successfully requested the location update",
-                    Toast.LENGTH_LONG
-                ).show()
-                println("success")
-            }
-            ?.addOnFailureListener {
-                Toast.makeText(activity, it.message.toString(), Toast.LENGTH_LONG).show()
-                println("fail")
-            }*/
+    fun requestUpdate(){
+        val settingsClient : SettingsClient = LocationServices.getSettingsClient(requireActivity())
+        val builder = LocationSettingsRequest.Builder()
+        mLocationRequest = LocationRequest()
+        builder.addLocationRequest(mLocationRequest)
+        val locationSettingsRequest = builder.build()
+// Check the device location settings.
+        settingsClient.checkLocationSettings(locationSettingsRequest)
+            // Define the listener for success in calling the API for checking device location settings.
+            .addOnSuccessListener(OnSuccessListener { locationSettingsResponse ->
+                val locationSettingsStates = locationSettingsResponse.locationSettingsStates
+                val stringBuilder = StringBuilder()
+                // Check whether the location function is enabled.
+                stringBuilder.append("isLocationUsable=")
+                    .append(locationSettingsStates.isLocationUsable)
+                // Check whether HMS Core (APK) is available.
+                stringBuilder.append(",\nisHMSLocationUsable=")
+                    .append(locationSettingsStates.isHMSLocationUsable)
+                Log.i(TAG, "checkLocationSetting onComplete:$stringBuilder")
+            })
+            // Define callback for failure in checking the device location settings.
+            .addOnFailureListener(OnFailureListener { e ->
+                Log.i(TAG, "checkLocationSetting onFailure:" + e.message)
+            })
     }
+
+   private fun requestLocationUpdates() {
+        val settingsClient : SettingsClient = LocationServices.getSettingsClient(requireActivity())
+       try {
+           val builder = LocationSettingsRequest.Builder()
+           builder.addLocationRequest(mLocationRequest)
+           val locationSettingsRequest = builder.build()
+               // Check the device location settings.
+           settingsClient.checkLocationSettings(locationSettingsRequest)
+               // Define the listener for success in calling the API for checking device location settings.
+               .addOnSuccessListener { locationSettingsResponse ->
+                   val locationSettingsStates = locationSettingsResponse.locationSettingsStates
+                   val stringBuilder = StringBuilder()
+                   // Check whether the location function is enabled.
+                   stringBuilder.append("isLocationUsable=")
+                       .append(locationSettingsStates.isLocationUsable)
+                   // Check whether HMS Core (APK) is available.
+                   stringBuilder.append(",\nisHMSLocationUsable=")
+                       .append(locationSettingsStates.isHMSLocationUsable)
+                   Log.i(TAG, "checkLocationSetting onComplete:$stringBuilder")
+               }
+               // Define callback for failure in checking the device location settings.
+               .addOnFailureListener(OnFailureListener { e ->
+                   Log.i(TAG, "checkLocationSetting onFailure:" + e.message)
+               })
+           /*var builder: LocationSettingsRequest.Builder = LocationSettingsRequest.Builder()
+           builder.addLocationRequest(mLocationRequest)
+           var locationSettingsRequest: LocationSettingsRequest = builder.build()
+
+           settingsClient.checkLocationSettings(locationSettingsRequest)
+               .addOnSuccessListener {
+                   Log.i(TAG, "check location settings success")
+                   fusedLocationProviderClient.requestLocationUpdates(
+                       mLocationRequest, mLocationCallback,
+                       Looper.getMainLooper()
+                   ).addOnSuccessListener {
+                       HMSLocationLog.i(TAG, "requestLocationUpdatesWithCallback onSuccess", "")
+                   }.addOnFailureListener {
+                       Log.e(TAG, "requestLocationUpdatesWithCallback onFailure:" + it.message)
+                   }
+               }
+               // Define callback for failure in checking the device location settings.
+               .addOnFailureListener {
+                   Log.e(TAG, "checkLocationSetting onFailure:" + it.message)
+               }*/
+       } catch (e: java.lang.Exception) {
+           HMSLocationLog.e(TAG, "requestLocationUpdatesWithCallback exception" + e.message, "")
+       }
+       /*fusedLocationProviderClient.requestLocationUpdates(
+           mLocationRequest,
+           mLocationCallback,
+           Looper.getMainLooper()
+       )
+           ?.addOnSuccessListener {
+               Toast.makeText(
+                   activity,
+                   "Successfully requested the location update",
+                   Toast.LENGTH_LONG
+               ).show()
+               println("success")
+           }
+           ?.addOnFailureListener {
+               Toast.makeText(activity, it.message.toString(), Toast.LENGTH_LONG).show()
+               println("fail")
+           }*/
+   }
 
     private fun removeLocationUpdates() {
         try {
