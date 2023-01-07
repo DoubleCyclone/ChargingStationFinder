@@ -8,7 +8,7 @@
     <string name="detailsTitle">Location Details</string>
     <string name="countryTv">Country</string>
     <string name="countryCodeTv">Country Code</string>
-    <string name="townTv">Town</string>
+    <string name="distanceTv">Distance</string>
     <string name="locationTv">Location</string>
     <string name="latitudeTv">Latitude</string>
     <string name="longitudeTv">Longitude</string>
@@ -17,11 +17,12 @@
     <string name="welcomeUserTv">Welcome</string>
     <string name="zero">0.0</string>
     <string name="gpsBtn">GPS Button</string>
+    <string name="distanceTvHint">Distance (km)</string>
 
 
     <string-array name="countries_array">
-        <item>Turkey</item>
-        <item>China</item>
-        <item>Germany</item>
+        <item>TR</item> <!-- turkey -->
+        <item>CN</item> <!-- china -->
+        <item>DE</item> <!-- germany -->
     </string-array>
 </resources>

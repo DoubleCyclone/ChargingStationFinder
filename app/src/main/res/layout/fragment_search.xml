@@ -57,11 +57,11 @@
 
 
     <TextView
-        android:id="@+id/TownTv"
+        android:id="@+id/DistanceTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="bottom"
-        android:text="@string/townTv"
+        android:text="@string/distanceTv"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
@@ -81,15 +81,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.278"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TownTv">
+        app:layout_constraintTop_toBottomOf="@+id/DistanceTv">
 
         <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:autofillHints="none"
-            android:hint="@string/townTv"
-            android:inputType="text"
+            android:hint="@string/distanceTvHint"
+            android:inputType="number"
             android:maxLines="1" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,9 +123,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/zero"
-        app:layout_constraintBottom_toTopOf="@+id/longitudeTv"
         app:layout_constraintEnd_toEndOf="@+id/locationTv"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/latitudeTv"
         app:layout_constraintTop_toBottomOf="@+id/locationTv" />
 
@@ -161,7 +160,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <ImageButton
-        android:id="@+id/clearBtn"
+        android:id="@+id/locationBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
