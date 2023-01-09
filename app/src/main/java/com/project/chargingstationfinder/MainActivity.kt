@@ -1,9 +1,7 @@
 package com.project.chargingstationfinder
 
 
-import android.Manifest
 import android.Manifest.permission.*
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -16,8 +14,6 @@ import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.huawei.agconnect.auth.AGConnectAuth
-import com.huawei.hms.location.LocationServices
-import com.huawei.hms.location.SettingsClient
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
 
 
@@ -25,6 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
     private fun permissions() {
         // Dynamically apply for required permissions if the API level is 28 or smaller.
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
@@ -95,10 +94,6 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, strings, 2)
             }
         }
-    }
-
-    companion object{
-        val Instance = this
     }
 
 }

@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.hmf.tasks.OnFailureListener
@@ -35,14 +36,13 @@ class SearchFragment : Fragment() {
     private var radius: Int = 0
     private var countryCode: String = ""
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(layoutInflater)
-
-
 
         return binding.root
     }
@@ -63,10 +63,14 @@ class SearchFragment : Fragment() {
 
     private fun setListeners() {
         binding.toMapbtn.setOnClickListener {
+
             setFragmentResult("r", bundleOf("radius" to radius))
             setFragmentResult("c", bundleOf("countryCode" to countryCode))
-            setFragmentResult("la", bundleOf("latitude" to binding.latitudeNumberTv.text.toString().toFloat()))
-            setFragmentResult("lo", bundleOf("longitude" to binding.longitudeNumberTv.text.toString().toFloat()))
+            setFragmentResult("la", bundleOf("latitude" to binding.latitudeNumberTv.text.toString().toDouble()))
+            setFragmentResult("lo", bundleOf("longitude" to binding.longitudeNumberTv.text.toString().toDouble()))
+
+            println("$radius , $countryCode , ${binding.latitudeNumberTv.text.toString().toDouble()} , ${binding.longitudeNumberTv.text.toString().toDouble()} , waltuh")
+
             searchToMap()
         }
         binding.locationBtn.setOnClickListener {
