@@ -1,28 +1,26 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.constraintlayout.widget.StateSet.TAG
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.hdsturkey.yalovabsm404.utils.SharedPreferencesHelper
 import com.huawei.hms.maps.*
 import com.huawei.hms.maps.model.*
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
-import com.project.chargingstationfinder.network.ApiClient
-import com.project.chargingstationfinder.network.Constant
-import com.project.chargingstationfinder.network.ChargingStation
-import com.project.chargingstationfinder.network.ApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.project.chargingstationfinder.model.*
+import com.project.chargingstationfinder.viewmodel.MapViewModel
 
 
 class MapFragment : Fragment(), OnMapReadyCallback {
+
+    private val viewModel: MapViewModel by lazy {
+        ViewModelProvider(this).get(MapViewModel::class.java)
+    }
 
     private lateinit var binding: FragmentMapBinding
     private lateinit var hMap: HuaweiMap
@@ -39,18 +37,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setFragmentResultListener("r") { key, bundle ->
-            radius = bundle.getInt("radius")
-        }
-        setFragmentResultListener("c") { key, bundle ->
-            countryCode = bundle.getString("countryCode").toString()
-        }
-        setFragmentResultListener("la") { key, bundle ->
-            latitude = bundle.getDouble("latitude")
-        }
-        setFragmentResultListener("lo") { key, bundle ->
-            longitude = bundle.getDouble("longitude")
-        }
+        radius = SharedPreferencesHelper.getInt("radius")
+        countryCode = SharedPreferencesHelper.getString("countryCode")
+        latitude = SharedPreferencesHelper.getFloat("latitude")
+        longitude = SharedPreferencesHelper.getFloat("longitude")
+
         println("$radius , $countryCode , $latitude , $longitude , amogus")
 
         // Initialize the SDK.
@@ -80,9 +71,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMapView.onCreate(mapViewBundle)
         mMapView.getMapAsync(this)
 
-        //TODO
-        apiService = ApiClient.getClient()!!
-        val post = apiService.getPois(
+        viewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
+
+        /*apiService = ApiClient.getClient()!!
+        val client = apiService.getPois(
             "TR",
             41.031261,
             29.117277,
@@ -91,7 +83,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             Constant.apiKey
         )
 
-        post.enqueue(object : Callback<List<ChargingStation>> {
+        client.enqueue(object : Callback<List<ChargingStation>> {
             override fun onFailure(call: Call<List<ChargingStation>>, t: Throwable) {
                 Toast.makeText(context, t.message.toString(), Toast.LENGTH_LONG).show()
                 println(t.message.toString())
@@ -143,7 +135,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
-        })
+        })*/
 
         setListeners()
     }
@@ -156,7 +148,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(huaweiMap: HuaweiMap) {
-        Log.d(TAG, "onMapReady: ")
+        /*Log.d(TAG, "onMapReady: ")
         hMap = huaweiMap
 
         // marker add
@@ -164,25 +156,26 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker()) // default marker
                 .title("Huawei Turkey") // maker title
-                .position(LatLng(latitude, longitude)) // marker position
+                .position(LatLng(latitude.toDouble(), longitude.toDouble())) // marker position
 
         )
         // camera position settings
         cameraPosition = CameraPosition.builder()
-            .target(LatLng(latitude, longitude)) //41.031261, 29.117277
+            .target(LatLng(latitude.toDouble(), longitude.toDouble())) //41.031261, 29.117277
             .zoom(10f)
             .bearing(2.0f)
             .tilt(2.5f).build()
         cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
-        huaweiMap.moveCamera(cameraUpdate)
+        huaweiMap.moveCamera(cameraUpdate)*/
+        viewModel.onMapReady(huaweiMap)
 
     }
 
     companion object {
         var radius: Int = 0
         var countryCode: String = ""
-        var latitude: Double = 0.0
-        var longitude: Double = 0.0
+        var latitude: Float = 0F
+        var longitude: Float = 0F
 
         private const val MAPVIEW_BUNDLE_KEY =
             "DAEDACvUF0gNnfPjNQIE3uC70aAZNtSAQGomaz+R1X9ZP6w37Slh6GDIlm+sV/ag3MOzyeWpT8thAEYVuGv8xhUWyMIXvgJV5pDM1Q=="

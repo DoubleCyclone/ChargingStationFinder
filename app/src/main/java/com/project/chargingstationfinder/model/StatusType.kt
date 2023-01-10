@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.network
+package com.project.chargingstationfinder.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.view
 
 
 import android.Manifest.permission.*
@@ -13,7 +13,9 @@ import androidx.constraintlayout.widget.StateSet
 import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.hdsturkey.yalovabsm404.utils.SharedPreferencesHelper
 import com.huawei.agconnect.auth.AGConnectAuth
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
 
 
@@ -21,8 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         supportActionBar?.title = getString(R.string.student_id)
+
+        SharedPreferencesHelper.init(this)
 
         permissions()
 

@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
 
 class DetailsFragment : Fragment() {

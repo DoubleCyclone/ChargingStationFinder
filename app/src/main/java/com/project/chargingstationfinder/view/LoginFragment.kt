@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.huawei.agconnect.api.AGConnectApi
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.agconnect.auth.AGConnectAuthCredential
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {

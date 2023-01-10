@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.project.chargingstationfinder.MapFragment"
+        android:name="com.project.chargingstationfinder.view.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.project.chargingstationfinder.DetailsFragment"
+        android:name="com.project.chargingstationfinder.view.DetailsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <action
@@ -25,7 +25,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.project.chargingstationfinder.LoginFragment"
+        android:name="com.project.chargingstationfinder.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.project.chargingstationfinder.SearchFragment"
+        android:name="com.project.chargingstationfinder.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action

@@ -1,5 +1,6 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.view
 
+import android.content.SharedPreferences
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -11,18 +12,16 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.constraintlayout.widget.StateSet.TAG
 import androidx.core.os.bundleOf
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
+import com.hdsturkey.yalovabsm404.utils.SharedPreferencesHelper
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.hmf.tasks.OnFailureListener
-import com.huawei.hmf.tasks.OnSuccessListener
 import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentSearchBinding
-
 
 class SearchFragment : Fragment() {
 
@@ -64,19 +63,23 @@ class SearchFragment : Fragment() {
     private fun setListeners() {
         binding.toMapbtn.setOnClickListener {
 
-            setFragmentResult("r", bundleOf("radius" to radius))
-            setFragmentResult("c", bundleOf("countryCode" to countryCode))
-            setFragmentResult("la", bundleOf("latitude" to binding.latitudeNumberTv.text.toString().toDouble()))
-            setFragmentResult("lo", bundleOf("longitude" to binding.longitudeNumberTv.text.toString().toDouble()))
-
-            println("$radius , $countryCode , ${binding.latitudeNumberTv.text.toString().toDouble()} , ${binding.longitudeNumberTv.text.toString().toDouble()} , waltuh")
+            SharedPreferencesHelper.putInt("radius", radius)
+            SharedPreferencesHelper.putString("countryCode", countryCode)
+            SharedPreferencesHelper.putFloat(
+                "latitude",
+                binding.latitudeNumberTv.text.toString().toFloat()
+            )
+            SharedPreferencesHelper.putFloat(
+                "longitude",
+                binding.longitudeNumberTv.text.toString().toFloat()
+            )
 
             searchToMap()
         }
         binding.locationBtn.setOnClickListener {
             requestUpdate()
         }
-        binding.clearTv.setOnClickListener{
+        binding.clearTv.setOnClickListener {
             removeLocationUpdates()
         }
     }
@@ -165,13 +168,13 @@ class SearchFragment : Fragment() {
                         Log.i(TAG, "requestLocationUpdatesWithCallback onSuccess")
                     }
                     .addOnFailureListener {
-                        Log.e(TAG, "requestLocationUpdatesWithCallback onFailure:" + it.message);
+                        Log.e(TAG, "requestLocationUpdatesWithCallback onFailure:" + it.message)
                     }
             }
             // Define callback for failure in checking the device location settings.
-            .addOnFailureListener(OnFailureListener { e ->
+            .addOnFailureListener { e ->
                 Log.i(TAG, "checkLocationSetting onFailure:" + e.message)
-            })
+            }
 
 
     }
