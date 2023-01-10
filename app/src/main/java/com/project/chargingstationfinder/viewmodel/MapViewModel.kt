@@ -1,5 +1,6 @@
 package com.project.chargingstationfinder.viewmodel
 
+import SharedPreferencesHelper
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
 import androidx.lifecycle.LiveData
@@ -9,11 +10,10 @@ import com.huawei.hms.maps.CameraUpdate
 import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.model.*
+import com.project.chargingstationfinder.misc.Constant
 import com.project.chargingstationfinder.model.ApiClient
 import com.project.chargingstationfinder.model.ChargingStation
-import com.project.chargingstationfinder.model.Constant
 import com.project.chargingstationfinder.model.Repository
-import com.project.chargingstationfinder.view.MapFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,6 +30,10 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
     private lateinit var chargingStationList: MutableList<ChargingStation>
     private lateinit var cameraUpdate: CameraUpdate
     private lateinit var cameraPosition: CameraPosition
+    private val radius = SharedPreferencesHelper.getInt("radius")
+    private val countryCode = SharedPreferencesHelper.getString("countryCode")
+    private val latitude = SharedPreferencesHelper.getFloat("latitude")
+    private val longitude = SharedPreferencesHelper.getFloat("longitude")
 
     init {
         fetchChargingStation()
@@ -38,10 +42,10 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
     private fun fetchChargingStation() {
 
         val client = repository.getChargingStations(
-            "TR",
-            41.031261,
-            29.117277,
-            10,
+            countryCode,
+            latitude,
+            longitude,
+            radius,
             2,
             Constant.apiKey
         )
@@ -70,7 +74,7 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
                                             BitmapDescriptorFactory.HUE_GREEN
                                         )
                                     )
-                                    .title(it.AddressInfo?.AddressLine1 ?: "empty")
+                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
                                     .position(
                                         LatLng(
                                             it.AddressInfo?.Latitude ?: 0.0,
@@ -86,7 +90,7 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
                                             BitmapDescriptorFactory.HUE_RED
                                         )
                                     )
-                                    .title(it.AddressInfo?.AddressLine1 ?: "empty")
+                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
                                     .position(
                                         LatLng(
                                             it.AddressInfo?.Latitude ?: 0.0,
@@ -110,11 +114,11 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
         marker = huaweiMap.addMarker(
             MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker()) // default marker
-                .title("Huawei Turkey") // maker title
+                .title("Your Location") // maker title
                 .position(
                     LatLng(
-                        MapFragment.latitude.toDouble(),
-                        MapFragment.longitude.toDouble()
+                        latitude.toDouble(),
+                        longitude.toDouble()
                     )
                 ) // marker position
 
@@ -123,10 +127,10 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
         cameraPosition = CameraPosition.builder()
             .target(
                 LatLng(
-                    MapFragment.latitude.toDouble(),
-                    MapFragment.longitude.toDouble()
+                    latitude.toDouble(),
+                    longitude.toDouble()
                 )
-            ) //41.031261, 29.117277
+            )
             .zoom(10f)
             .bearing(2.0f)
             .tilt(2.5f).build()

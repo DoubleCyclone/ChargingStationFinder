@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.model
+package com.project.chargingstationfinder.misc
 
 object Constant {
     const val baseUrl : String = "https://api.openchargemap.io/v3/"

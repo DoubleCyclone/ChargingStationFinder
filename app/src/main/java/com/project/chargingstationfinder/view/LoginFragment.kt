@@ -1,20 +1,21 @@
 package com.project.chargingstationfinder.view
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.huawei.agconnect.api.AGConnectApi
-import com.huawei.agconnect.auth.AGConnectAuth
-import com.huawei.agconnect.auth.AGConnectAuthCredential
-import com.project.chargingstationfinder.R
+import androidx.lifecycle.ViewModelProvider
 import com.project.chargingstationfinder.databinding.FragmentLoginBinding
+import com.project.chargingstationfinder.viewmodel.LoginViewModel
 
 class LoginFragment : Fragment() {
+
+    private val loginViewModel: LoginViewModel by lazy {
+        ViewModelProvider(this)[LoginViewModel::class.java]
+    }
 
     private lateinit var binding: FragmentLoginBinding
 
@@ -30,31 +31,17 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-        if(AGConnectAuth.getInstance().currentUser != null){
-            loginToSearch()
-        }
+        loginViewModel.checkIfLoggedIn(this)
     }
 
     private fun setListeners() {
         binding.signInbtn.setOnClickListener {
-            AGConnectAuth.getInstance()
-                .signIn(activity, AGConnectAuthCredential.HMS_Provider)
-                .addOnSuccessListener {
-                    Toast.makeText(activity, "successful", Toast.LENGTH_SHORT).show()
-                    loginToSearch()
-                }.addOnFailureListener {
-                    Toast.makeText(activity, it.message.toString(), Toast.LENGTH_SHORT).show()
-                }
+            loginViewModel.logIn(activity as Activity,this)
         }
-    }
-
-    private fun loginToSearch() {
-        findNavController().navigate(R.id.action_loginFragment_to_searchFragment)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        AGConnectApi.getInstance().activityLifecycle()
-            .onActivityResult(requestCode, resultCode, data)
+        loginViewModel.onActivityResult(requestCode, resultCode, data)
     }
 }

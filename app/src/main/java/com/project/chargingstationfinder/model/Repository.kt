@@ -3,8 +3,8 @@ package com.project.chargingstationfinder.model
 class Repository(private val apiService: ApiService) {
     fun getChargingStations(
         countryCode: String,
-        latitude: Double,
-        longitude: Double,
+        latitude: Float,
+        longitude: Float,
         distance: Int,
         distanceUnit: Int,
         apiKey: String

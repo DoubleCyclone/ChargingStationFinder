@@ -1,12 +1,11 @@
-package com.project.chargingstationfinder
+package com.project.chargingstationfinder.misc
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.model.Connections
 
 class DetailsAdapter(private val detailsList: List<Connections>) :
