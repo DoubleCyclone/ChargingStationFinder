@@ -1,28 +1,26 @@
 package com.project.chargingstationfinder.viewmodel
 
 import SharedPreferencesHelper
-import android.app.Activity
 import android.location.Location
 import android.os.Looper
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.databinding.FragmentSearchBinding
+import com.project.chargingstationfinder.view.SearchFragment
 
 class SearchViewModel : ViewModel() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var mLocationRequest = LocationRequest()
     private lateinit var mLocationCallback: LocationCallback
-    private var radius: Int = 0
+    var radius: Int = 0
     private var countryCode: String = ""
 
-    fun initializeLocationReq(binding: FragmentSearchBinding, activity: Activity) {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(activity)
+    fun initializeLocationReq(view : SearchFragment) {
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.activity)
         mLocationRequest.interval = 10000
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
@@ -36,8 +34,8 @@ class SearchViewModel : ViewModel() {
                             "onLocationResult location[Longitude,Latitude,Accuracy]:" + location.longitude + "," + location.latitude + "," + location.accuracy,
                             null
                         )
-                        binding.longitudeNumberTv.text = location.longitude.toString()
-                        binding.latitudeNumberTv.text = location.latitude.toString()
+                        view.binding.longitudeNumberTv.text = location.longitude.toString()
+                        view.binding.latitudeNumberTv.text = location.latitude.toString()
                     }
 
                 }
@@ -45,18 +43,18 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun requestUpdate(binding: FragmentSearchBinding, activity: Activity) {
+    fun requestUpdate(view : SearchFragment) {
         //get the radius from the editText if it is not empty
-        if (!binding.editText.text.toString().equals(null) && binding.editText.text.toString() != ""
+        if (!view.binding.editText.text.toString().equals(null) && view.binding.editText.text.toString() != ""
         ) {
-            radius = binding.editText.text.toString().toInt()
+            radius = view.binding.editText.text.toString().toInt()
         }
         println("$radius")
         //get the selected country code from the spinner
-        countryCode = binding.countriesSpinner.selectedItem.toString()
+        countryCode = view.binding.countriesSpinner.selectedItem.toString()
 
         //fusedLocation stuff
-        val settingsClient: SettingsClient = LocationServices.getSettingsClient(activity)
+        val settingsClient: SettingsClient = LocationServices.getSettingsClient(view.activity)
         val builder = LocationSettingsRequest.Builder()
         mLocationRequest = LocationRequest()
         builder.addLocationRequest(mLocationRequest)
@@ -98,12 +96,12 @@ class SearchViewModel : ViewModel() {
 
     }
 
-    fun removeLocationUpdates(binding: FragmentSearchBinding, fragment: Fragment) {
+    fun removeLocationUpdates(view :SearchFragment) {
         try {
             fusedLocationProviderClient.removeLocationUpdates(mLocationCallback)
                 .addOnSuccessListener {
-                    binding.longitudeNumberTv.text = fragment.getString(R.string.zero)
-                    binding.latitudeNumberTv.text = fragment.getString(R.string.zero)
+                    view.binding.longitudeNumberTv.text = view.getString(R.string.zero)
+                    view.binding.latitudeNumberTv.text = view.getString(R.string.zero)
                     HMSLocationLog.i(
                         StateSet.TAG,
                         "removeLocationUpdatesWithCallback onSuccess",
@@ -125,20 +123,20 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun searchToMap(fragment: Fragment) {
-        fragment.findNavController().navigate(R.id.action_searchFragment_to_mapFragment)
+    fun searchToMap(view: SearchFragment) {
+        view.findNavController().navigate(R.id.action_searchFragment_to_mapFragment)
     }
 
-    fun putVariables(binding: FragmentSearchBinding) {
+    fun putVariables(view: SearchFragment) {
         SharedPreferencesHelper.putInt("radius", radius)
         SharedPreferencesHelper.putString("countryCode", countryCode)
         SharedPreferencesHelper.putFloat(
             "latitude",
-            binding.latitudeNumberTv.text.toString().toFloat()
+            view.binding.latitudeNumberTv.text.toString().toFloat()
         )
         SharedPreferencesHelper.putFloat(
             "longitude",
-            binding.longitudeNumberTv.text.toString().toFloat()
+            view.binding.longitudeNumberTv.text.toString().toFloat()
         )
     }
 }

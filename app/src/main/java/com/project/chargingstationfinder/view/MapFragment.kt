@@ -26,9 +26,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //Fragment onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize the SDK.
-        MapsInitializer.setApiKey(Constant.apiKey)
-        MapsInitializer.initialize(activity)
+
+        mapViewModel.initializeMap(this)
     }
 
     override fun onCreateView(
@@ -55,7 +54,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         setListeners()
     }
-
+    // TODO: Not yet implemented
     private fun setListeners() {
     }
 

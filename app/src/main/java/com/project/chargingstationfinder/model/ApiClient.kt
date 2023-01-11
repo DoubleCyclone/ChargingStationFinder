@@ -7,19 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-object ApiClient {
-    private lateinit var retrofit: ApiService
-
-    fun getClient(): ApiService {
-
-
-        return Retrofit.Builder().baseUrl(Constant.baseUrl)
-            .addConverterFactory(GsonConverterFactory.create()).build()
-            .create(ApiService::class.java)
-    }
-}
-
-interface ApiService {
+interface ApiClient {
 
     @GET("poi")
     fun getPois(
@@ -30,4 +18,13 @@ interface ApiService {
         @Query("distanceunit") distanceUnit: Int,
         @Query("key") apiKey: String
     ): Call<List<ChargingStation>>
+
+    companion object {
+        operator fun invoke(): ApiClient {
+
+            return Retrofit.Builder().baseUrl(Constant.baseUrl)
+                .addConverterFactory(GsonConverterFactory.create()).build()
+                .create(ApiClient::class.java)
+        }
+    }
 }

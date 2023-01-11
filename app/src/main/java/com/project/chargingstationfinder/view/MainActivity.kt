@@ -1,40 +1,38 @@
 package com.project.chargingstationfinder.view
 
-
 import SharedPreferencesHelper
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
+import com.project.chargingstationfinder.misc.toast
 import com.project.chargingstationfinder.viewmodel.MainViewModel
-
 
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by lazy {
-        ViewModelProvider(this)[MainViewModel::class.java]
-    }
-
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+        val binding: ActivityMainBinding =
+            DataBindingUtil.setContentView(this, R.layout.activity_main)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        binding.mainViewModel = viewModel
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        mainViewModel.navController = navHostFragment.navController
+        viewModel.navController = navHostFragment.navController
 
         supportActionBar?.title = getString(R.string.student_id)
 
         SharedPreferencesHelper.init(this)
-        mainViewModel.permissions(this)
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        viewModel.permissions(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -45,13 +43,11 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logoutMenubtn -> {
-                mainViewModel.logOut()
+                viewModel.logOut()
             }
         }
         return super.onOptionsItemSelected(item)
     }
-
-
 }
 
 

@@ -1,6 +1,5 @@
 package com.project.chargingstationfinder.view
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,7 @@ class SearchFragment : Fragment() {
         ViewModelProvider(this)[SearchViewModel::class.java]
     }
 
-    private lateinit var binding: FragmentSearchBinding
+    lateinit var binding: FragmentSearchBinding
     private lateinit var spinner: Spinner
 
     override fun onCreateView(
@@ -41,20 +40,24 @@ class SearchFragment : Fragment() {
                 "Welcome " + AGConnectAuth.getInstance().currentUser.displayName + " !"
         }
 
-        searchViewModel.initializeLocationReq(binding, activity as Activity)
+        //searchViewModel.initializeLocationReq(binding, activity as Activity)
+        searchViewModel.initializeLocationReq(this)
         setListeners()
     }
 
     private fun setListeners() {
         binding.toMapbtn.setOnClickListener {
-            searchViewModel.putVariables(binding)
+            //searchViewModel.putVariables(binding)
+            searchViewModel.putVariables(this)
             searchViewModel.searchToMap(this)
         }
         binding.locationBtn.setOnClickListener {
-            searchViewModel.requestUpdate(binding, requireActivity())
+           // searchViewModel.requestUpdate(binding, requireActivity())
+            searchViewModel.requestUpdate(this)
         }
         binding.clearTv.setOnClickListener {
-            searchViewModel.removeLocationUpdates(binding, this)
+            //searchViewModel.removeLocationUpdates(binding, this)
+            searchViewModel.removeLocationUpdates(this)
         }
     }
 

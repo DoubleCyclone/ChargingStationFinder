@@ -1,6 +1,7 @@
 package com.project.chargingstationfinder.viewmodel
 
 import SharedPreferencesHelper
+import android.os.Bundle
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
 import androidx.lifecycle.LiveData
@@ -9,16 +10,18 @@ import androidx.lifecycle.ViewModel
 import com.huawei.hms.maps.CameraUpdate
 import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
+import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.misc.Constant
 import com.project.chargingstationfinder.model.ApiClient
 import com.project.chargingstationfinder.model.ChargingStation
 import com.project.chargingstationfinder.model.Repository
+import com.project.chargingstationfinder.view.MapFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapViewModel(private val repository: Repository = Repository(ApiClient.getClient())) :
+class MapViewModel(private val repository: Repository = Repository(ApiClient.invoke())) :
     ViewModel() {
 
     private var _chargingStationsLiveData = MutableLiveData<List<ChargingStation>>()
@@ -37,6 +40,12 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.get
 
     init {
         fetchChargingStation()
+    }
+
+    fun initializeMap(view:MapFragment){
+        // Initialize the SDK.
+        MapsInitializer.setApiKey(Constant.apiKey)
+        MapsInitializer.initialize(view.activity)
     }
 
     private fun fetchChargingStation() {

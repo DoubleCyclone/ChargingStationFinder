@@ -1,6 +1,6 @@
 package com.project.chargingstationfinder.model
 
-class Repository(private val apiService: ApiService) {
+class Repository(private val apiClient: ApiClient) {
     fun getChargingStations(
         countryCode: String,
         latitude: Float,
@@ -8,6 +8,5 @@ class Repository(private val apiService: ApiService) {
         distance: Int,
         distanceUnit: Int,
         apiKey: String
-    ) = apiService.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
-
+    ) = apiClient.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
 }
