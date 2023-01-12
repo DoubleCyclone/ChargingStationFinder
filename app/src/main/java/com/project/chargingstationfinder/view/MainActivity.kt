@@ -7,22 +7,33 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.navigation.fragment.NavHostFragment
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
+import com.project.chargingstationfinder.factory.MainViewModelFactory
+import com.project.chargingstationfinder.factory.MapViewModelFactory
 import com.project.chargingstationfinder.viewmodel.MainViewModel
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.kodein
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val factory : MainViewModelFactory by instance()
 
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
+        binding.lifecycleOwner = this
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment

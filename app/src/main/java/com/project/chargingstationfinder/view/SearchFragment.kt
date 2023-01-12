@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -13,13 +14,21 @@ import androidx.lifecycle.ViewModelProvider
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentSearchBinding
+import com.project.chargingstationfinder.factory.LoginViewModelFactory
+import com.project.chargingstationfinder.factory.SearchViewModelFactory
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.hide
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.SearchViewModel
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class SearchFragment : Fragment(), GeneralListener {
+class SearchFragment : Fragment(), GeneralListener, KodeinAware {
+
+    override val kodein by kodein()
+    private val factory: SearchViewModelFactory by instance()
 
     private lateinit var viewModel: SearchViewModel
     lateinit var binding: FragmentSearchBinding
@@ -30,11 +39,11 @@ class SearchFragment : Fragment(), GeneralListener {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentSearchBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
-        binding.searchViewModel = viewModel
+        viewModel = ViewModelProvider(this,factory)[SearchViewModel::class.java]
         viewModel.generalListener = this
-
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_search,container,false)
+        binding.searchViewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 

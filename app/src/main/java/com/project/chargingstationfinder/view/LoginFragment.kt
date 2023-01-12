@@ -5,18 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentLoginBinding
+import com.project.chargingstationfinder.factory.LoginViewModelFactory
+import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.hide
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.LoginViewModel
+import org.kodein.di.KodeinAware
+import org.kodein.di.android.x.kodein
+import org.kodein.di.generic.instance
 
-class LoginFragment : Fragment(), GeneralListener {
+class LoginFragment : Fragment(), GeneralListener, KodeinAware {
+
+    override val kodein by kodein()
+    private val factory: LoginViewModelFactory by instance()
 
     private lateinit var viewModel: LoginViewModel
     private lateinit var binding: FragmentLoginBinding
@@ -26,11 +35,11 @@ class LoginFragment : Fragment(), GeneralListener {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentLoginBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-        binding.loginViewModel = viewModel
+        viewModel = ViewModelProvider(this, factory)[LoginViewModel::class.java]
         viewModel.generalListener = this
-
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        binding.loginViewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 

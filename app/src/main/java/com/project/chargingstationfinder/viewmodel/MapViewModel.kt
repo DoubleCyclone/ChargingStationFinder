@@ -12,15 +12,15 @@ import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.interfaces.GeneralListener
-import com.project.chargingstationfinder.util.Constant
-import com.project.chargingstationfinder.responses.ChargingStation
 import com.project.chargingstationfinder.repository.MapRepository
+import com.project.chargingstationfinder.responses.ChargingStation
+import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.view.MapFragment
 
 class MapViewModel(
     private val repository : MapRepository
 ) :
-    ViewModel() {
+    ViewModel(){
 
     private var _chargingStationsLiveData = MutableLiveData<List<ChargingStation>>()
     val chargingStationLiveData: LiveData<List<ChargingStation>>
@@ -44,21 +44,26 @@ class MapViewModel(
     }
 
     private fun getStations() {
-        generalListener?.onStarted("Station Info Collection Started")
-        if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
-            generalListener?.onFailure("Country code or Location is Invalid")
-            return
+        try {
+            generalListener?.onStarted("Station Info Collection Started")
+            if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
+                generalListener?.onFailure("Country code or Location is Invalid")
+                return
+            }
+            val mapResponse = repository.getChargingStations(
+                countryCode,
+                latitude,
+                longitude,
+                radius,
+                2,
+                Constant.apiKey,
+                hMap
+            )
+            generalListener?.onSuccess("Station Info Collection Successful",mapResponse)
+        }catch (e:java.lang.Exception){
+            generalListener?.onFailure(e.message!!)
         }
-        val mapResponse = repository.getChargingStations(
-            countryCode,
-            latitude,
-            longitude,
-            radius,
-            2,
-            Constant.apiKey,
-            hMap
-        )
-        generalListener?.onSuccess("Station Info Collection Successful",mapResponse)
+
     }
 
     fun onMapReady(huaweiMap: HuaweiMap) {

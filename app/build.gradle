@@ -83,7 +83,10 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation ("androidx.cardview:cardview:1.0.0")
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
+
+    implementation ("org.kodein.di:kodein-di-generic-jvm:6.2.1")
+    implementation ("org.kodein.di:kodein-di-framework-android-x:6.2.1")
 
 }
