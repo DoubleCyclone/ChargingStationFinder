@@ -44,29 +44,13 @@ class MapRepository {
                         getStationResponse.value = response.body()?.toString()
                         chargingStationList = (response.body() as MutableList<ChargingStation>?)!!
                         chargingStationList.forEach {
-
-                            if (it.StatusType?.IsOperational == true) {
+                            if (it.StatusType?.IsOperational != null) {
                                 marker = hMap.addMarker(
                                     MarkerOptions()
                                         .icon(
                                             BitmapDescriptorFactory.defaultMarker(
-                                                BitmapDescriptorFactory.HUE_GREEN
-                                            )
-                                        )
-                                        .title(it.AddressInfo?.AddressLine1 ?: "unknown")
-                                        .position(
-                                            LatLng(
-                                                it.AddressInfo?.Latitude ?: 0.0,
-                                                it.AddressInfo?.Longitude ?: 0.0
-                                            )
-                                        )
-                                )
-                            } else {
-                                marker = hMap.addMarker(
-                                    MarkerOptions()
-                                        .icon(
-                                            BitmapDescriptorFactory.defaultMarker(
-                                                BitmapDescriptorFactory.HUE_RED
+                                                if (it.StatusType?.IsOperational!!)
+                                                    BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
                                             )
                                         )
                                         .title(it.AddressInfo?.AddressLine1 ?: "unknown")
@@ -78,7 +62,6 @@ class MapRepository {
                                         )
                                 )
                             }
-
                         }
                     } else {
                         getStationResponse.value = response.errorBody()?.toString()

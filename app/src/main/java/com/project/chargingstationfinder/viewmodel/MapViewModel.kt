@@ -2,6 +2,7 @@ package com.project.chargingstationfinder.viewmodel
 
 import SharedPreferencesHelper
 import android.util.Log
+import android.widget.Toast
 import androidx.constraintlayout.widget.StateSet
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -24,7 +25,7 @@ class MapViewModel :
     val chargingStationLiveData: LiveData<List<ChargingStation>>
         get() = _chargingStationsLiveData
 
-    private var generalListener: GeneralListener? = null
+    var generalListener: GeneralListener? = null
 
     private lateinit var hMap: HuaweiMap
     private lateinit var marker: Marker
@@ -42,9 +43,9 @@ class MapViewModel :
     }
 
     private fun getStations() {
-        generalListener?.onStarted()
+        generalListener?.onStarted("Station Info Collection Started")
         if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
-            generalListener?.onFailure("Country code or Location is Invalid!!!")
+            generalListener?.onFailure("Country code or Location is Invalid")
             return
         }
         val mapResponse = MapRepository().getChargingStations(
@@ -56,14 +57,13 @@ class MapViewModel :
             Constant.apiKey,
             hMap
         )
-        generalListener?.onSuccess("successful",mapResponse)
+        generalListener?.onSuccess("Station Info Collection Successful",mapResponse)
     }
 
     fun onMapReady(huaweiMap: HuaweiMap) {
         Log.d(StateSet.TAG, "onMapReady: ")
         hMap = huaweiMap
 
-        // marker add
         marker = huaweiMap.addMarker(
             MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker()) // default marker
@@ -73,10 +73,8 @@ class MapViewModel :
                         latitude.toDouble(),
                         longitude.toDouble()
                     )
-                ) // marker position
-
+                )
         )
-        // camera position settings
         cameraPosition = CameraPosition.builder()
             .target(
                 LatLng(

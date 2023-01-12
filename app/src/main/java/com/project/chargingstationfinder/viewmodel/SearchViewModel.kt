@@ -10,16 +10,20 @@ import androidx.navigation.fragment.findNavController
 import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
 import com.project.chargingstationfinder.R
+import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.view.SearchFragment
 
 class SearchViewModel : ViewModel() {
+
+    var generalListener: GeneralListener? = null
+
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var mLocationRequest = LocationRequest()
     private lateinit var mLocationCallback: LocationCallback
-    var radius: Int = 0
+    var radius: Int = 10 // default shouldn't be zero as if the location button is clicked before putting in the distance, it shows no stations as the radius is 0
     private var countryCode: String = ""
 
-    fun initializeLocationReq(view : SearchFragment) {
+    fun initializeLocationReq(view: SearchFragment) {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(view.activity)
         mLocationRequest.interval = 10000
         mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -37,19 +41,20 @@ class SearchViewModel : ViewModel() {
                         view.binding.longitudeNumberTv.text = location.longitude.toString()
                         view.binding.latitudeNumberTv.text = location.latitude.toString()
                     }
-
                 }
+                generalListener?.onSuccess("Update Request Success", null)
             }
         }
     }
 
-    fun requestUpdate(view : SearchFragment) {
+    fun requestUpdate(view: SearchFragment) {
+        generalListener?.onStarted("Update Request Started")
         //get the radius from the editText if it is not empty
-        if (!view.binding.editText.text.toString().equals(null) && view.binding.editText.text.toString() != ""
+        if (!view.binding.editText.text.toString()
+                .equals(null) && view.binding.editText.text.toString() != ""
         ) {
             radius = view.binding.editText.text.toString().toInt()
         }
-        println("$radius")
         //get the selected country code from the spinner
         countryCode = view.binding.countriesSpinner.selectedItem.toString()
 
@@ -80,24 +85,26 @@ class SearchViewModel : ViewModel() {
                 )
                     .addOnSuccessListener {
                         Log.i(StateSet.TAG, "requestLocationUpdatesWithCallback onSuccess")
+
                     }
                     .addOnFailureListener {
                         Log.e(
                             StateSet.TAG,
                             "requestLocationUpdatesWithCallback onFailure:" + it.message
                         )
+                        generalListener?.onFailure(it.message ?: "Update Request Failure")
                     }
             }
             // Define callback for failure in checking the device location settings.
             .addOnFailureListener { e ->
                 Log.i(StateSet.TAG, "checkLocationSetting onFailure:" + e.message)
+                generalListener?.onFailure(e.message ?: "Check Location Settings Failure")
             }
-
-
     }
 
-    fun removeLocationUpdates(view :SearchFragment) {
+    fun removeLocationUpdates(view: SearchFragment) {
         try {
+            generalListener?.onStarted("Remove Updates Started")
             fusedLocationProviderClient.removeLocationUpdates(mLocationCallback)
                 .addOnSuccessListener {
                     view.binding.longitudeNumberTv.text = view.getString(R.string.zero)
@@ -107,12 +114,14 @@ class SearchViewModel : ViewModel() {
                         "removeLocationUpdatesWithCallback onSuccess",
                         null
                     )
+                    generalListener?.onSuccess("Remove Updates Success", null)
                 }.addOnFailureListener {
                     HMSLocationLog.i(
                         StateSet.TAG,
                         "removeLocationUpdatesWithCallback onFailure: " + it.message,
                         null
                     )
+                    generalListener?.onFailure(it.message ?: "Remove Updates Failure")
                 }
         } catch (e: java.lang.Exception) {
             HMSLocationLog.e(
@@ -120,6 +129,7 @@ class SearchViewModel : ViewModel() {
                 "removeLocationUpdatesWithCallback exception" + e.message,
                 null
             )
+            generalListener?.onFailure(e.message ?: "Remove Updates Exception")
         }
     }
 

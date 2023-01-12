@@ -17,15 +17,13 @@ class LoginViewModel : ViewModel() {
     var generalListener: GeneralListener? = null
 
     fun logIn(view: LoginFragment) {
-        generalListener?.onStarted()
+        generalListener?.onStarted("Login Started")
         AGConnectAuth.getInstance()
             .signIn(view.activity, AGConnectAuthCredential.HMS_Provider)
             .addOnSuccessListener {
-                //Toast.makeText(view.activity, "successful", Toast.LENGTH_SHORT).show()
                 loginToSearch(view)
-                generalListener?.onSuccess("successful",null)
+                generalListener?.onSuccess("Login Successful",null)
             }.addOnFailureListener {
-                //Toast.makeText(view.activity, it.message.toString(), Toast.LENGTH_SHORT).show()
                 generalListener?.onFailure(it.message.toString())
             }
     }

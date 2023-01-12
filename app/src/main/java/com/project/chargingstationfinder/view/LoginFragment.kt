@@ -19,7 +19,6 @@ import com.project.chargingstationfinder.viewmodel.LoginViewModel
 class LoginFragment : Fragment(), GeneralListener {
 
     private lateinit var viewModel: LoginViewModel
-
     private lateinit var binding: FragmentLoginBinding
 
     override fun onCreateView(
@@ -52,8 +51,8 @@ class LoginFragment : Fragment(), GeneralListener {
         viewModel.onActivityResult(requestCode, resultCode, data)
     }
 
-    override fun onStarted() {
-        activity?.toast("Login Started")
+    override fun onStarted(message: String) {
+        activity?.toast(message)
         binding.loginPb.show()
     }
 

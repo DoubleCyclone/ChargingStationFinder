@@ -7,18 +7,23 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.project.chargingstationfinder.R
+import com.project.chargingstationfinder.databinding.FragmentLoginBinding
 import com.project.chargingstationfinder.databinding.FragmentSearchBinding
+import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.util.hide
+import com.project.chargingstationfinder.util.show
+import com.project.chargingstationfinder.util.toast
+import com.project.chargingstationfinder.viewmodel.LoginViewModel
 import com.project.chargingstationfinder.viewmodel.SearchViewModel
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), GeneralListener {
 
-    private val searchViewModel: SearchViewModel by lazy {
-        ViewModelProvider(this)[SearchViewModel::class.java]
-    }
-
+    private lateinit var viewModel: SearchViewModel
     lateinit var binding: FragmentSearchBinding
     private lateinit var spinner: Spinner
 
@@ -28,6 +33,10 @@ class SearchFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[SearchViewModel::class.java]
+        binding.searchViewModel = viewModel
+        viewModel.generalListener = this
+
         return binding.root
     }
 
@@ -39,25 +48,20 @@ class SearchFragment : Fragment() {
             binding.welcomeUsertv.text =
                 "Welcome " + AGConnectAuth.getInstance().currentUser.displayName + " !"
         }
-
-        //searchViewModel.initializeLocationReq(binding, activity as Activity)
-        searchViewModel.initializeLocationReq(this)
+        viewModel.initializeLocationReq(this)
         setListeners()
     }
 
     private fun setListeners() {
         binding.toMapbtn.setOnClickListener {
-            //searchViewModel.putVariables(binding)
-            searchViewModel.putVariables(this)
-            searchViewModel.searchToMap(this)
+            viewModel.putVariables(this)
+            viewModel.searchToMap(this)
         }
         binding.locationBtn.setOnClickListener {
-           // searchViewModel.requestUpdate(binding, requireActivity())
-            searchViewModel.requestUpdate(this)
+            viewModel.requestUpdate(this)
         }
         binding.clearTv.setOnClickListener {
-            //searchViewModel.removeLocationUpdates(binding, this)
-            searchViewModel.removeLocationUpdates(this)
+            viewModel.removeLocationUpdates(this)
         }
     }
 
@@ -76,6 +80,25 @@ class SearchFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onStarted(message: String) {
+        activity?.toast(message)
+        binding.searchPb.show()
+    }
+
+    override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
+        binding.searchPb.hide()
+        generalResponse?.observe(this, Observer {
+            activity?.toast(it)
+        }) ?: run {
+            activity?.toast(message)
+        }
+    }
+
+    override fun onFailure(message: String) {
+        binding.searchPb.hide()
+        activity?.toast(message)
     }
 
 }

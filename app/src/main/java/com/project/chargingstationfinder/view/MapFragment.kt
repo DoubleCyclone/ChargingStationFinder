@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -11,36 +12,33 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.huawei.hms.maps.*
 import com.project.chargingstationfinder.R
+import com.project.chargingstationfinder.databinding.ActivityMainBinding
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
+import com.project.chargingstationfinder.databinding.FragmentSearchBinding
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.Constant
+import com.project.chargingstationfinder.util.hide
+import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.MapViewModel
+import com.project.chargingstationfinder.viewmodel.SearchViewModel
 
+class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener {
 
-class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
-
-    private val mapViewModel: MapViewModel by lazy {
-        ViewModelProvider(this)[MapViewModel::class.java]
-    }
-
-    private lateinit var binding: FragmentMapBinding
+    private lateinit var viewModel: MapViewModel
+    lateinit var binding: FragmentMapBinding
     private lateinit var mMapView: MapView
-
-    //Fragment onCreate
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        mapViewModel.initializeMap(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
+        viewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        viewModel.generalListener = this
+        viewModel.initializeMap(this)
         binding = FragmentMapBinding.inflate(layoutInflater)
+        binding.mapViewModel = viewModel
         return binding.root
     }
 
@@ -55,10 +53,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
         mMapView.onCreate(mapViewBundle)
         mMapView.getMapAsync(this)
 
-        //mapViewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
+        //viewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
 
         setListeners()
     }
+
     // TODO: Not yet implemented
     private fun setListeners() {
     }
@@ -69,7 +68,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
     }
 
     override fun onMapReady(huaweiMap: HuaweiMap) {
-        mapViewModel.onMapReady(huaweiMap)
+        viewModel.onMapReady(huaweiMap)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -84,12 +83,14 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
         mMapView.onSaveInstanceState(mapViewBundle)
     }
 
-    override fun onStarted() {
-        activity?.toast("Map Started")
+    override fun onStarted(message: String) {
+        binding.mapPb.show()
+        activity?.toast(message)
     }
 
-    override fun onSuccess(message: String,generalResponse: LiveData<String>?) {
-        generalResponse?.observe(this, Observer{
+    override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
+        binding.mapPb.hide()
+        generalResponse?.observe(this, Observer {
             activity?.toast(it)
         }) ?: run {
             activity?.toast(message)
@@ -97,7 +98,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
     }
 
     override fun onFailure(message: String) {
-        TODO("Not yet implemented")
+        binding.mapPb.hide()
+        activity?.toast(message)
     }
 }
 

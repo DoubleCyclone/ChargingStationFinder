@@ -17,7 +17,7 @@
     <string name="welcomeUserTv">Welcome</string>
     <string name="zero">0.0</string>
     <string name="gpsBtn">GPS Button</string>
-    <string name="distanceTvHint">Distance (km)</string>
+    <string name="distanceTvHint">Distance (km) (Default = 10)</string>
 
 
     <string-array name="countries_array">
