@@ -15,10 +15,9 @@ import com.huawei.hms.maps.OnMapReadyCallback
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
 import com.project.chargingstationfinder.interfaces.GeneralListener
-import com.project.chargingstationfinder.util.Constant
-import com.project.chargingstationfinder.util.hide
-import com.project.chargingstationfinder.util.show
-import com.project.chargingstationfinder.util.toast
+import com.project.chargingstationfinder.repository.ApiClient
+import com.project.chargingstationfinder.repository.MapRepository
+import com.project.chargingstationfinder.util.*
 import com.project.chargingstationfinder.viewmodel.MapViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener {
@@ -32,7 +31,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(this)[MapViewModel::class.java]
+        val api = ApiClient()
+        val repository = MapRepository(api)
+        val factory = MapViewModelFactory(repository)
+
+
+        viewModel = ViewModelProvider(this,factory)[MapViewModel::class.java]
         viewModel.generalListener = this
         viewModel.initializeMap(this)
         binding = FragmentMapBinding.inflate(layoutInflater)

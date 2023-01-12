@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MapRepository(
-    //private val api : ApiClient
+    private val api : ApiClient
 ) {
 
     private lateinit var marker: Marker
@@ -30,7 +30,7 @@ class MapRepository(
     ): LiveData<String> {
 
         val getStationResponse = MutableLiveData<String>()
-        ApiClient().getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
+        api.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
             .enqueue(object :
                 Callback<List<ChargingStation>> {
                 override fun onFailure(call: Call<List<ChargingStation>>, t: Throwable) {

@@ -17,7 +17,9 @@ import com.project.chargingstationfinder.responses.ChargingStation
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.view.MapFragment
 
-class MapViewModel :
+class MapViewModel(
+    private val repository : MapRepository
+) :
     ViewModel() {
 
     private var _chargingStationsLiveData = MutableLiveData<List<ChargingStation>>()
@@ -47,7 +49,7 @@ class MapViewModel :
             generalListener?.onFailure("Country code or Location is Invalid")
             return
         }
-        val mapResponse = MapRepository().getChargingStations(
+        val mapResponse = repository.getChargingStations(
             countryCode,
             latitude,
             longitude,
