@@ -7,12 +7,14 @@ import com.huawei.hms.maps.model.BitmapDescriptorFactory
 import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.maps.model.Marker
 import com.huawei.hms.maps.model.MarkerOptions
-import com.project.chargingstationfinder.json.ChargingStation
+import com.project.chargingstationfinder.responses.ChargingStation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MapRepository {
+class MapRepository(
+    //private val api : ApiClient
+) {
 
     private lateinit var marker: Marker
     private lateinit var chargingStationList: MutableList<ChargingStation>
@@ -41,7 +43,7 @@ class MapRepository {
                 ) {
 
                     if (response.isSuccessful) {
-                        getStationResponse.value = response.body()?.toString()
+                        getStationResponse.value = response.body().toString()
                         chargingStationList = (response.body() as MutableList<ChargingStation>?)!!
                         chargingStationList.forEach {
                             if (it.StatusType?.IsOperational != null) {
@@ -64,7 +66,7 @@ class MapRepository {
                             }
                         }
                     } else {
-                        getStationResponse.value = response.errorBody()?.toString()
+                        getStationResponse.value = response.errorBody()?.string()
                     }
                 }
             })

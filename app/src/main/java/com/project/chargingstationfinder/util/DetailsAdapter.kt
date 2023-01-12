@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.json.Connections
+import com.project.chargingstationfinder.responses.Connections
 
 class DetailsAdapter(private val detailsList: List<Connections>) :
     RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder>() {

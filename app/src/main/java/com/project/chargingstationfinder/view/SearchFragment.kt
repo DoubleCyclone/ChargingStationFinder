@@ -12,13 +12,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.databinding.FragmentLoginBinding
 import com.project.chargingstationfinder.databinding.FragmentSearchBinding
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.hide
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.util.toast
-import com.project.chargingstationfinder.viewmodel.LoginViewModel
 import com.project.chargingstationfinder.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment(), GeneralListener {

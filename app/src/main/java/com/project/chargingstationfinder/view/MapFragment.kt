@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.huawei.hms.maps.*
+import com.huawei.hms.maps.HuaweiMap
+import com.huawei.hms.maps.MapView
+import com.huawei.hms.maps.OnMapReadyCallback
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.databinding.ActivityMainBinding
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
-import com.project.chargingstationfinder.databinding.FragmentSearchBinding
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.util.hide
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.MapViewModel
-import com.project.chargingstationfinder.viewmodel.SearchViewModel
 
 class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener {
 
@@ -89,11 +87,12 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener {
     }
 
     override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
-        binding.mapPb.hide()
-        generalResponse?.observe(this, Observer {
+        generalResponse?.observe(this) {
             activity?.toast(it)
-        }) ?: run {
+            binding.mapPb.hide()
+        } ?: run {
             activity?.toast(message)
+            binding.mapPb.hide()
         }
     }
 

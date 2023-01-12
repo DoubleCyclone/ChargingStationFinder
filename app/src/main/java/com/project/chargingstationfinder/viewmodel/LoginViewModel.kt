@@ -1,8 +1,6 @@
 package com.project.chargingstationfinder.viewmodel
 
 import android.content.Intent
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.huawei.agconnect.api.AGConnectApi

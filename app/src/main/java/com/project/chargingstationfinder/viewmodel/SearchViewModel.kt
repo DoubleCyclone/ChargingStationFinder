@@ -20,7 +20,7 @@ class SearchViewModel : ViewModel() {
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var mLocationRequest = LocationRequest()
     private lateinit var mLocationCallback: LocationCallback
-    var radius: Int = 10 // default shouldn't be zero as if the location button is clicked before putting in the distance, it shows no stations as the radius is 0
+    private var radius: Int = 10 // default shouldn't be zero as if the location button is clicked before putting in the distance, it shows no stations as the radius is 0
     private var countryCode: String = ""
 
     fun initializeLocationReq(view: SearchFragment) {

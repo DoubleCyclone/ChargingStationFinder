@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.json
+package com.project.chargingstationfinder.responses
 
 import com.google.gson.annotations.SerializedName
 
