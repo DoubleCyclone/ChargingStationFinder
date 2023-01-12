@@ -1,5 +1,6 @@
 import android.content.Context
 import android.content.SharedPreferences
+import com.huawei.hms.maps.HuaweiMap
 
 object SharedPreferencesHelper {
 
@@ -46,6 +47,5 @@ object SharedPreferencesHelper {
     fun getFloat(key: String, defaultValue: Float = -1F): Float {
         return sharedPreferences.getFloat(key, defaultValue)
     }
-
 }
 

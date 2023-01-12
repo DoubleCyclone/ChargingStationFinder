@@ -2,27 +2,31 @@ package com.project.chargingstationfinder.viewmodel
 
 import android.content.Intent
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.huawei.agconnect.api.AGConnectApi
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.huawei.agconnect.auth.AGConnectAuthCredential
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.interfaces.LoginListener
+import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.view.LoginFragment
 
 class LoginViewModel : ViewModel() {
 
-    var loginListener: LoginListener? = null
+    var generalListener: GeneralListener? = null
 
     fun logIn(view: LoginFragment) {
+        generalListener?.onStarted()
         AGConnectAuth.getInstance()
             .signIn(view.activity, AGConnectAuthCredential.HMS_Provider)
             .addOnSuccessListener {
-                Toast.makeText(view.activity, "successful", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(view.activity, "successful", Toast.LENGTH_SHORT).show()
                 loginToSearch(view)
+                generalListener?.onSuccess("successful",null)
             }.addOnFailureListener {
-                Toast.makeText(view.activity, it.message.toString(), Toast.LENGTH_SHORT).show()
+                //Toast.makeText(view.activity, it.message.toString(), Toast.LENGTH_SHORT).show()
+                generalListener?.onFailure(it.message.toString())
             }
     }
 

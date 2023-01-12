@@ -1,14 +1,23 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.MapFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.huawei.hms.maps.MapView xmlns:map="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/map_view_huawei"
+    <data>
+        <variable
+            name="mapViewModel"
+            type="com.project.chargingstationfinder.viewmodel.MapViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        map:uiCompass="true"
-        map:uiZoomControls="true" />
+        tools:context=".view.MapFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.huawei.hms.maps.MapView xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/map_view_huawei"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            map:uiCompass="true"
+            map:uiZoomControls="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

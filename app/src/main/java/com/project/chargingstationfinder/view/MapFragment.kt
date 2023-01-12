@@ -5,16 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.huawei.hms.maps.*
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
-import com.project.chargingstationfinder.misc.Constant
+import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.util.Constant
+import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.MapViewModel
 
 
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener{
 
     private val mapViewModel: MapViewModel by lazy {
         ViewModelProvider(this)[MapViewModel::class.java]
@@ -26,6 +30,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     //Fragment onCreate
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         mapViewModel.initializeMap(this)
     }
@@ -50,7 +55,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         mMapView.onCreate(mapViewBundle)
         mMapView.getMapAsync(this)
 
-        mapViewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
+        //mapViewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
 
         setListeners()
     }
@@ -77,6 +82,22 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         }
 
         mMapView.onSaveInstanceState(mapViewBundle)
+    }
+
+    override fun onStarted() {
+        activity?.toast("Map Started")
+    }
+
+    override fun onSuccess(message: String,generalResponse: LiveData<String>?) {
+        generalResponse?.observe(this, Observer{
+            activity?.toast(it)
+        }) ?: run {
+            activity?.toast(message)
+        }
+    }
+
+    override fun onFailure(message: String) {
+        TODO("Not yet implemented")
     }
 }
 

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
-import com.project.chargingstationfinder.misc.toast
 import com.project.chargingstationfinder.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.mainViewModel = viewModel
 
         val navHostFragment =

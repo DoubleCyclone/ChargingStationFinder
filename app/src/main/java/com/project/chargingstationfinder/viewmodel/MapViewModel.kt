@@ -1,7 +1,6 @@
 package com.project.chargingstationfinder.viewmodel
 
 import SharedPreferencesHelper
-import android.os.Bundle
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
 import androidx.lifecycle.LiveData
@@ -12,25 +11,23 @@ import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
-import com.project.chargingstationfinder.misc.Constant
-import com.project.chargingstationfinder.model.ApiClient
-import com.project.chargingstationfinder.model.ChargingStation
-import com.project.chargingstationfinder.model.Repository
+import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.util.Constant
+import com.project.chargingstationfinder.json.ChargingStation
+import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.view.MapFragment
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
-class MapViewModel(private val repository: Repository = Repository(ApiClient.invoke())) :
+class MapViewModel :
     ViewModel() {
 
     private var _chargingStationsLiveData = MutableLiveData<List<ChargingStation>>()
     val chargingStationLiveData: LiveData<List<ChargingStation>>
         get() = _chargingStationsLiveData
 
+    private var generalListener: GeneralListener? = null
+
     private lateinit var hMap: HuaweiMap
     private lateinit var marker: Marker
-    private lateinit var chargingStationList: MutableList<ChargingStation>
     private lateinit var cameraUpdate: CameraUpdate
     private lateinit var cameraPosition: CameraPosition
     private val radius = SharedPreferencesHelper.getInt("radius")
@@ -38,81 +35,28 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.inv
     private val latitude = SharedPreferencesHelper.getFloat("latitude")
     private val longitude = SharedPreferencesHelper.getFloat("longitude")
 
-    init {
-        fetchChargingStation()
-    }
-
-    fun initializeMap(view:MapFragment){
+    fun initializeMap(view: MapFragment) {
         // Initialize the SDK.
         MapsInitializer.setApiKey(Constant.apiKey)
         MapsInitializer.initialize(view.activity)
     }
 
-    private fun fetchChargingStation() {
-
-        val client = repository.getChargingStations(
+    private fun getStations() {
+        generalListener?.onStarted()
+        if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
+            generalListener?.onFailure("Country code or Location is Invalid!!!")
+            return
+        }
+        val mapResponse = MapRepository().getChargingStations(
             countryCode,
             latitude,
             longitude,
             radius,
             2,
-            Constant.apiKey
+            Constant.apiKey,
+            hMap
         )
-
-        client.enqueue(object : Callback<List<ChargingStation>> {
-            override fun onFailure(call: Call<List<ChargingStation>>, t: Throwable) {
-                //Toast.makeText(context, t.message.toString(), Toast.LENGTH_LONG).show()
-                Log.d("Failure", t.message.toString())
-                println(t.message.toString())
-            }
-
-            override fun onResponse(
-                call: Call<List<ChargingStation>>,
-                response: Response<List<ChargingStation>>
-            ) {
-
-                if (response.isSuccessful) {
-                    chargingStationList = (response.body() as MutableList<ChargingStation>?)!!
-                    chargingStationList.forEach {
-
-                        if (it.StatusType?.IsOperational == true) {
-                            marker = hMap.addMarker(
-                                MarkerOptions()
-                                    .icon(
-                                        BitmapDescriptorFactory.defaultMarker(
-                                            BitmapDescriptorFactory.HUE_GREEN
-                                        )
-                                    )
-                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
-                                    .position(
-                                        LatLng(
-                                            it.AddressInfo?.Latitude ?: 0.0,
-                                            it.AddressInfo?.Longitude ?: 0.0
-                                        )
-                                    )
-                            )
-                        } else {
-                            marker = hMap.addMarker(
-                                MarkerOptions()
-                                    .icon(
-                                        BitmapDescriptorFactory.defaultMarker(
-                                            BitmapDescriptorFactory.HUE_RED
-                                        )
-                                    )
-                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
-                                    .position(
-                                        LatLng(
-                                            it.AddressInfo?.Latitude ?: 0.0,
-                                            it.AddressInfo?.Longitude ?: 0.0
-                                        )
-                                    )
-                            )
-                        }
-
-                    }
-                }
-            }
-        })
+        generalListener?.onSuccess("successful",mapResponse)
     }
 
     fun onMapReady(huaweiMap: HuaweiMap) {
@@ -145,5 +89,6 @@ class MapViewModel(private val repository: Repository = Repository(ApiClient.inv
             .tilt(2.5f).build()
         cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
         huaweiMap.moveCamera(cameraUpdate)
+        getStations()
     }
 }

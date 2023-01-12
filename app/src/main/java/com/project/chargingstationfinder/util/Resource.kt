@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.misc
+package com.project.chargingstationfinder.util
 
 data class Resource<out T>(val status: Status, val data: T?, val message: String?) {
 

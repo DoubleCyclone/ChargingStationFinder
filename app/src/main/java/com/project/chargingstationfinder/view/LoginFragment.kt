@@ -6,17 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.project.chargingstationfinder.interfaces.LoginListener
+import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.databinding.FragmentLoginBinding
-import com.project.chargingstationfinder.misc.toast
+import com.project.chargingstationfinder.util.hide
+import com.project.chargingstationfinder.util.show
+import com.project.chargingstationfinder.util.toast
 import com.project.chargingstationfinder.viewmodel.LoginViewModel
 
-class LoginFragment : Fragment(), LoginListener{
+class LoginFragment : Fragment(), GeneralListener {
 
-    private val loginViewModel: LoginViewModel by lazy {
-        ViewModelProvider(this)[LoginViewModel::class.java]
-    }
+    private lateinit var viewModel: LoginViewModel
 
     private lateinit var binding: FragmentLoginBinding
 
@@ -26,35 +28,47 @@ class LoginFragment : Fragment(), LoginListener{
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentLoginBinding.inflate(layoutInflater)
+        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        binding.loginViewModel = viewModel
+        viewModel.generalListener = this
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
-        loginViewModel.checkIfLoggedIn(this)
+        viewModel.checkIfLoggedIn(this)
     }
 
     private fun setListeners() {
         binding.signInbtn.setOnClickListener {
-            loginViewModel.logIn(this)
+            viewModel.logIn(this)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        loginViewModel.onActivityResult(requestCode, resultCode, data)
+        viewModel.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onStarted() {
         activity?.toast("Login Started")
+        binding.loginPb.show()
     }
 
-    override fun onSuccess() {
-        activity?.toast("Login Success")
+    override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
+        generalResponse?.observe(this, Observer {
+            binding.loginPb.hide()
+            activity?.toast(it)
+        }) ?: run {
+            binding.loginPb.hide()
+            activity?.toast(message)
+        }
     }
 
     override fun onFailure(message: String) {
+        binding.loginPb.hide()
         activity?.toast(message)
     }
 }

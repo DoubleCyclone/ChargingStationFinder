@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.misc
+package com.project.chargingstationfinder.util
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.model.Connections
+import com.project.chargingstationfinder.json.Connections
 
 class DetailsAdapter(private val detailsList: List<Connections>) :
     RecyclerView.Adapter<DetailsAdapter.DetailsViewHolder>() {
