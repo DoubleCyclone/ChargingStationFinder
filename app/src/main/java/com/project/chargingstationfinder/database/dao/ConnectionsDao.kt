@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.database
+package com.project.chargingstationfinder.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

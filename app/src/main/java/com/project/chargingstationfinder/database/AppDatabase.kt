@@ -2,6 +2,10 @@ package com.project.chargingstationfinder.database
 
 import android.content.Context
 import androidx.room.*
+import com.project.chargingstationfinder.database.dao.AddressInfoDao
+import com.project.chargingstationfinder.database.dao.ChargingStationDao
+import com.project.chargingstationfinder.database.dao.ConnectionsDao
+import com.project.chargingstationfinder.database.dao.StatusTypeDao
 import com.project.chargingstationfinder.database.entities.AddressInfo
 import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.database.entities.Connections

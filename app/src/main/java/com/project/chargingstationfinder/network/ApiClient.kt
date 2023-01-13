@@ -2,6 +2,7 @@ package com.project.chargingstationfinder.network
 
 import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.database.entities.ChargingStation
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -22,9 +23,14 @@ interface ApiClient {
     ): Response<List<ChargingStation>>
 
     companion object {
-        operator fun invoke(): ApiClient {
+        operator fun invoke(
+            networkConnectionInterceptor: NetworkConnectionInterceptor
+        ): ApiClient {
 
-            return Retrofit.Builder().baseUrl(Constant.baseUrl)
+            val okHttpClient =
+                OkHttpClient.Builder().addInterceptor(networkConnectionInterceptor).build()
+
+            return Retrofit.Builder().client(okHttpClient).baseUrl(Constant.baseUrl)
                 .addConverterFactory(GsonConverterFactory.create()).build()
                 .create(ApiClient::class.java)
         }

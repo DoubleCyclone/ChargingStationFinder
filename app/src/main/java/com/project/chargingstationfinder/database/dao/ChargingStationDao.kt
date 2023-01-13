@@ -1,4 +1,4 @@
-package com.project.chargingstationfinder.database
+package com.project.chargingstationfinder.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
@@ -11,10 +11,9 @@ import com.project.chargingstationfinder.database.entities.ChargingStation
 interface ChargingStationDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(chargingStation: ChargingStation)
+    suspend fun insert(chargingStation: ChargingStation)
 
     @Query("SELECT * FROM ChargingStation")
     fun getChargingStation() : LiveData<ChargingStation>
-
 
 }

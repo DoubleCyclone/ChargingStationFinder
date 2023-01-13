@@ -15,7 +15,7 @@ data class ChargingStation(
     var ID: Int? = null,
     var UUID: String? = null,
     var AddressInfo: AddressInfo? = AddressInfo(),
-    //var Connections: ArrayList<Connections>? = ArrayList(),
+    var Connections: ArrayList<Connections>? = ArrayList(),
     var NumberOfPoints: Int? = null,
 ) {
 

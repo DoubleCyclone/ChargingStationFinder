@@ -2,6 +2,7 @@ package com.project.chargingstationfinder.factory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.project.chargingstationfinder.database.AppDatabase
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.viewmodel.MapViewModel

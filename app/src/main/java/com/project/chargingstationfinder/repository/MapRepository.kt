@@ -7,6 +7,7 @@ import com.huawei.hms.maps.model.BitmapDescriptorFactory
 import com.huawei.hms.maps.model.LatLng
 import com.huawei.hms.maps.model.Marker
 import com.huawei.hms.maps.model.MarkerOptions
+import com.project.chargingstationfinder.database.AppDatabase
 import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.network.ApiClient
 import com.project.chargingstationfinder.network.SafeApiRequest
@@ -15,8 +16,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MapRepository(
-    private val api: ApiClient
-) : SafeApiRequest() {
+    private val api: ApiClient,
+    private val db: AppDatabase
+    ) : SafeApiRequest() {
 
     suspend fun getChargingStations(
         countryCode: String,
@@ -31,4 +33,8 @@ class MapRepository(
             api.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
         }
     }
+
+    suspend fun saveChargingStation(chargingStation: ChargingStation) = db.getChargingStationDao().insert(chargingStation)
+
+    //fun getChargingStation() = db.getChargingStationDao().getChargingStation()
 }

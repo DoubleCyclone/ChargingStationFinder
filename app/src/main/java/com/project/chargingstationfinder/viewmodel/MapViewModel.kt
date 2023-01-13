@@ -10,10 +10,7 @@ import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
-import com.project.chargingstationfinder.util.ApiException
-import com.project.chargingstationfinder.util.Constant
-import com.project.chargingstationfinder.util.Coroutines
-import com.project.chargingstationfinder.util.PreferenceProvider
+import com.project.chargingstationfinder.util.*
 import com.project.chargingstationfinder.view.MapFragment
 
 class MapViewModel(
@@ -33,6 +30,8 @@ class MapViewModel(
     private val latitude = prefs.getFloat("latitude")
     private val longitude = prefs.getFloat("longitude")
 
+    //fun getChargingStation() = repository.getChargingStation()
+
     fun initializeMap(view: MapFragment) {
         // Initialize the SDK.
         MapsInitializer.setApiKey(Constant.apiKey)
@@ -41,7 +40,7 @@ class MapViewModel(
 
     private fun getStations() {
 
-        generalListener?.onStarted("Station Info Collection Started")
+        generalListener?.onStarted("Charging Station Info Collection Started")
         if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
             generalListener?.onFailure("Country code or Location is Invalid")
             return
@@ -56,9 +55,7 @@ class MapViewModel(
                     2,
                     Constant.apiKey
                 )
-                val chargingStationList =
-                    (mapResponse) // @TODO USES THE ONE IN THE JSON NOT THE ENTITY (WILL BE SOLVED WHEN THE OBJECTS IN ENTITY PROBLEM IS SOLVED)
-                chargingStationList.forEach {
+                mapResponse.forEach {
                     if (it.StatusType?.IsOperational != null) {
                         marker = hMap.addMarker(
                             MarkerOptions()
@@ -76,11 +73,16 @@ class MapViewModel(
                                     )
                                 )
                         )
+                        repository.saveChargingStation(it)
                     }
-                    //println(it.Connections.toString())
+                    println(it.Connections.toString())
+                    println(it.AddressInfo?.AddressLine1.toString() + it.AddressInfo?.AddressLine2.toString())
                 }
-                generalListener?.onSuccess(mapResponse.toString(), null)
+
+                generalListener?.onSuccess("Charging Station Info Collection Success", null)
             } catch (e: ApiException) {
+                generalListener?.onFailure(e.message!!)
+            } catch (e: NoInternetException) {
                 generalListener?.onFailure(e.message!!)
             }
         }

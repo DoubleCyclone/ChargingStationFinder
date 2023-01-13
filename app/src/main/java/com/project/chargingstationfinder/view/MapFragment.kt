@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapView
 import com.huawei.hms.maps.OnMapReadyCallback
 import com.project.chargingstationfinder.R
+import com.project.chargingstationfinder.database.AppDatabase
 import com.project.chargingstationfinder.databinding.FragmentMapBinding
 import com.project.chargingstationfinder.factory.MapViewModelFactory
 import com.project.chargingstationfinder.interfaces.GeneralListener
@@ -42,6 +44,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener, KodeinAware
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_map, container, false)
         binding.mapViewModel = viewModel
         binding.lifecycleOwner = this
+
+        /*viewModel.getChargingStation().observe(requireActivity(), Observer {
+            println(it.AddressInfo?.AddressLine1)
+        })*/
+
         return binding.root
     }
 

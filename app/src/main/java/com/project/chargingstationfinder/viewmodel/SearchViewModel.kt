@@ -10,6 +10,7 @@ import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.util.NoInternetException
 import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.SearchFragment
 
@@ -51,58 +52,63 @@ class SearchViewModel(
     }
 
     fun requestUpdate(view: SearchFragment) {
-        generalListener?.onStarted("Update Request Started")
-        //get the radius from the editText if it is not empty
-        if (!view.binding.editText.text.toString()
-                .equals(null) && view.binding.editText.text.toString() != ""
-        ) {
-            radius = view.binding.editText.text.toString().toInt()
+        try {
+            generalListener?.onStarted("Update Request Started")
+            //get the radius from the editText if it is not empty
+            if (!view.binding.editText.text.toString()
+                    .equals(null) && view.binding.editText.text.toString() != ""
+            ) {
+                radius = view.binding.editText.text.toString().toInt()
+            }
+            //get the selected country code from the spinner
+            countryCode = view.binding.countriesSpinner.selectedItem.toString()
+
+            //fusedLocation stuff
+            val settingsClient: SettingsClient = LocationServices.getSettingsClient(view.activity)
+            val builder = LocationSettingsRequest.Builder()
+            mLocationRequest = LocationRequest()
+            builder.addLocationRequest(mLocationRequest)
+            val locationSettingsRequest = builder.build()
+            // Check the device location settings.
+            settingsClient.checkLocationSettings(locationSettingsRequest)
+                // Define the listener for success in calling the API for checking device location settings.
+                .addOnSuccessListener { locationSettingsResponse ->
+                    val locationSettingsStates = locationSettingsResponse.locationSettingsStates
+                    val stringBuilder = StringBuilder()
+                    // Check whether the location function is enabled.
+                    stringBuilder.append("isLocationUsable=")
+                        .append(locationSettingsStates.isLocationUsable)
+                    // Check whether HMS Core (APK) is available.
+                    stringBuilder.append(",\nisHMSLocationUsable=")
+                        .append(locationSettingsStates.isHMSLocationUsable)
+                    Log.i(StateSet.TAG, "checkLocationSetting onComplete:$stringBuilder")
+
+                    fusedLocationProviderClient.requestLocationUpdates(
+                        mLocationRequest,
+                        mLocationCallback,
+                        Looper.getMainLooper()
+                    )
+                        .addOnSuccessListener {
+                            Log.i(StateSet.TAG, "requestLocationUpdatesWithCallback onSuccess")
+
+                        }
+                        .addOnFailureListener {
+                            Log.e(
+                                StateSet.TAG,
+                                "requestLocationUpdatesWithCallback onFailure:" + it.message
+                            )
+                            generalListener?.onFailure(it.message ?: "Update Request Failure")
+                        }
+                }
+                // Define callback for failure in checking the device location settings.
+                .addOnFailureListener { e ->
+                    Log.i(StateSet.TAG, "checkLocationSetting onFailure:" + e.message)
+                    generalListener?.onFailure(e.message ?: "Check Location Settings Failure")
+                }
+        }catch (e:java.lang.Exception){
+            generalListener?.onFailure(e.message!!)
         }
-        //get the selected country code from the spinner
-        countryCode = view.binding.countriesSpinner.selectedItem.toString()
 
-        //fusedLocation stuff
-        val settingsClient: SettingsClient = LocationServices.getSettingsClient(view.activity)
-        val builder = LocationSettingsRequest.Builder()
-        mLocationRequest = LocationRequest()
-        builder.addLocationRequest(mLocationRequest)
-        val locationSettingsRequest = builder.build()
-        // Check the device location settings.
-        settingsClient.checkLocationSettings(locationSettingsRequest)
-            // Define the listener for success in calling the API for checking device location settings.
-            .addOnSuccessListener { locationSettingsResponse ->
-                val locationSettingsStates = locationSettingsResponse.locationSettingsStates
-                val stringBuilder = StringBuilder()
-                // Check whether the location function is enabled.
-                stringBuilder.append("isLocationUsable=")
-                    .append(locationSettingsStates.isLocationUsable)
-                // Check whether HMS Core (APK) is available.
-                stringBuilder.append(",\nisHMSLocationUsable=")
-                    .append(locationSettingsStates.isHMSLocationUsable)
-                Log.i(StateSet.TAG, "checkLocationSetting onComplete:$stringBuilder")
-
-                fusedLocationProviderClient.requestLocationUpdates(
-                    mLocationRequest,
-                    mLocationCallback,
-                    Looper.getMainLooper()
-                )
-                    .addOnSuccessListener {
-                        Log.i(StateSet.TAG, "requestLocationUpdatesWithCallback onSuccess")
-
-                    }
-                    .addOnFailureListener {
-                        Log.e(
-                            StateSet.TAG,
-                            "requestLocationUpdatesWithCallback onFailure:" + it.message
-                        )
-                        generalListener?.onFailure(it.message ?: "Update Request Failure")
-                    }
-            }
-            // Define callback for failure in checking the device location settings.
-            .addOnFailureListener { e ->
-                Log.i(StateSet.TAG, "checkLocationSetting onFailure:" + e.message)
-                generalListener?.onFailure(e.message ?: "Check Location Settings Failure")
-            }
     }
 
     fun removeLocationUpdates(view: SearchFragment) {
