@@ -14,63 +14,18 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MapRepository(
-    private val api : ApiClient
+    private val api: ApiClient
 ) {
 
-    private lateinit var marker: Marker
-    private lateinit var chargingStationList: MutableList<ChargingStation>
-
-    fun getChargingStations(
+    suspend fun getChargingStations(
         countryCode: String,
         latitude: Float,
         longitude: Float,
         distance: Int,
         distanceUnit: Int,
         apiKey: String,
-        hMap: HuaweiMap
-    ): LiveData<String> {
+    ): Response<List<ChargingStation>> {
 
-        val getStationResponse = MutableLiveData<String>()
-        api.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
-            .enqueue(object :
-                Callback<List<ChargingStation>> {
-                override fun onFailure(call: Call<List<ChargingStation>>, t: Throwable) {
-                    getStationResponse.value = t.message
-                }
-
-                override fun onResponse(
-                    call: Call<List<ChargingStation>>,
-                    response: Response<List<ChargingStation>>
-                ) {
-
-                    if (response.isSuccessful) {
-                        getStationResponse.value = response.body().toString()
-                        chargingStationList = (response.body() as MutableList<ChargingStation>?)!!
-                        chargingStationList.forEach {
-                            if (it.StatusType?.IsOperational != null) {
-                                marker = hMap.addMarker(
-                                    MarkerOptions()
-                                        .icon(
-                                            BitmapDescriptorFactory.defaultMarker(
-                                                if (it.StatusType?.IsOperational!!)
-                                                    BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
-                                            )
-                                        )
-                                        .title(it.AddressInfo?.AddressLine1 ?: "unknown")
-                                        .position(
-                                            LatLng(
-                                                it.AddressInfo?.Latitude ?: 0.0,
-                                                it.AddressInfo?.Longitude ?: 0.0
-                                            )
-                                        )
-                                )
-                            }
-                        }
-                    } else {
-                        getStationResponse.value = response.errorBody()?.string()
-                    }
-                }
-            })
-        return getStationResponse
+        return api.getPois(countryCode, latitude, longitude, distance, distanceUnit, apiKey)
     }
 }

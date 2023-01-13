@@ -11,14 +11,15 @@ import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.util.Constant
+import com.project.chargingstationfinder.util.Coroutines
 import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.MapFragment
 
 class MapViewModel(
-    private val repository : MapRepository,
-    prefs : PreferenceProvider
+    private val repository: MapRepository,
+    prefs: PreferenceProvider
 ) :
-    ViewModel(){
+    ViewModel() {
 
     var generalListener: GeneralListener? = null
 
@@ -44,17 +45,45 @@ class MapViewModel(
                 generalListener?.onFailure("Country code or Location is Invalid")
                 return
             }
-            val mapResponse = repository.getChargingStations(
-                countryCode,
-                latitude,
-                longitude,
-                radius,
-                2,
-                Constant.apiKey,
-                hMap
-            )
-            generalListener?.onSuccess("Station Info Collection Successful",mapResponse)
-        }catch (e:java.lang.Exception){
+            Coroutines.main {
+                val response = repository.getChargingStations(
+                    countryCode,
+                    latitude,
+                    longitude,
+                    radius,
+                    2,
+                    Constant.apiKey
+                )
+                if (response.isSuccessful) {
+                    val chargingStationList =
+                        (response.body())!! // @TODO USES THE ONE IN THE JSON NOT THE ENTITY
+                    chargingStationList.forEach {
+                        if (it.StatusType?.IsOperational != null) {
+                            marker = hMap.addMarker(
+                                MarkerOptions()
+                                    .icon(
+                                        BitmapDescriptorFactory.defaultMarker(
+                                            if (it.StatusType?.IsOperational!!)
+                                                BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
+                                        )
+                                    )
+                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
+                                    .position(
+                                        LatLng(
+                                            it.AddressInfo?.Latitude ?: 0.0,
+                                            it.AddressInfo?.Longitude ?: 0.0
+                                        )
+                                    )
+                            )
+                        }
+                    }
+                    generalListener?.onSuccess(response.body().toString(), null)
+                } else {
+                    generalListener?.onFailure("Error Code : ${response.code()}")
+                }
+            }
+
+        } catch (e: java.lang.Exception) {
             generalListener?.onFailure(e.message!!)
         }
 
