@@ -3,22 +3,22 @@ package com.project.chargingstationfinder.network.responses
 import com.google.gson.annotations.SerializedName
 
 
-data class Connections (
+data class Connections(
 
-  @SerializedName("ID"               ) var ID               : Int?            = null,
-  @SerializedName("ConnectionTypeID" ) var ConnectionTypeID : Int?            = null,
-  @SerializedName("ConnectionType"   ) var ConnectionType   : ConnectionType? = ConnectionType(),
-  @SerializedName("Reference"        ) var Reference        : String?         = null,
-  @SerializedName("StatusTypeID"     ) var StatusTypeID     : Int?            = null,
-  @SerializedName("StatusType"       ) var StatusType       : StatusType?     = StatusType(),
-  //@SerializedName("LevelID"          ) var LevelID          : Int?            = null,
-  @SerializedName("Level"            ) var Level            : Level?          = Level(),
-  @SerializedName("Amps"             ) var Amps             : String?         = null,
-  @SerializedName("Voltage"          ) var Voltage          : String?         = null,
-  @SerializedName("PowerKW"          ) var PowerKW          : Double?            = null,
-  @SerializedName("CurrentTypeID"    ) var CurrentTypeID    : Int?            = null,
-  @SerializedName("CurrentType"      ) var CurrentType      : CurrentType?    = CurrentType(),
-  @SerializedName("Quantity"         ) var Quantity         : Int?            = null,
-  //@SerializedName("Comments"         ) var Comments         : String?         = null
+    val ID: Int?,
+    val ConnectionTypeID: Int?,
+    val ConnectionType: ConnectionType?,
+    val Reference: String?,
+    val StatusTypeID: Int?,
+    val StatusType: StatusType?,
+    val LevelID: Int?,
+    val Level: Level?,
+    val Amps: String?,
+    val Voltage: String?,
+    val PowerKW: Double?,
+    val CurrentTypeID: Int?,
+    val CurrentType: CurrentType?,
+    val Quantity: Int?,
+    val Comments: String?
 
 )

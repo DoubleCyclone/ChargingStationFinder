@@ -1,7 +1,7 @@
 package com.project.chargingstationfinder.network
 
 import com.project.chargingstationfinder.util.Constant
-import com.project.chargingstationfinder.json.ChargingStation
+import com.project.chargingstationfinder.database.entities.ChargingStation
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit

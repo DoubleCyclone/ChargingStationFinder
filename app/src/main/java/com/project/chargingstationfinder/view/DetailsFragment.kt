@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
 import com.project.chargingstationfinder.factory.DetailsViewModelFactory
-import com.project.chargingstationfinder.json.Connections
+import com.project.chargingstationfinder.database.entities.Connections
 import com.project.chargingstationfinder.util.ConnectionsItem
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.viewmodel.DetailsViewModel

@@ -1,18 +1,24 @@
 package com.project.chargingstationfinder.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room.*
+import com.project.chargingstationfinder.database.entities.AddressInfo
 import com.project.chargingstationfinder.database.entities.ChargingStation
+import com.project.chargingstationfinder.database.entities.Connections
+import com.project.chargingstationfinder.database.entities.StatusType
+import com.project.chargingstationfinder.util.Converter
 
 @Database(
-    entities = [ChargingStation::class],
+    entities = [ChargingStation::class, Connections::class, StatusType::class, AddressInfo::class],
     version = 1
 )
+@TypeConverters(Converter::class)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getChargingStationDao(): ChargingStationDao
+    abstract fun getConnectionsDao(): ConnectionsDao
+    abstract fun getStatusType(): StatusTypeDao
+    abstract fun getAddressInfo(): AddressInfoDao
 
     companion object {
         @Volatile

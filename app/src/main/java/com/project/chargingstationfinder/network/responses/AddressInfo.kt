@@ -3,25 +3,25 @@ package com.project.chargingstationfinder.network.responses
 import com.google.gson.annotations.SerializedName
 
 
-data class AddressInfo (
+data class AddressInfo(
 
-    @SerializedName("ID"                ) var ID                : Int?     = null,
-    @SerializedName("description"       ) var description       : String?  = null,
-    @SerializedName("AddressLine1"      ) var AddressLine1      : String?  = null,
-    @SerializedName("AddressLine2"      ) var AddressLine2      : String?  = null,
-    @SerializedName("Town"              ) var Town              : String?  = null,
-    @SerializedName("StateOrProvince"   ) var StateOrProvince   : String?  = null,
-    @SerializedName("Postcode"          ) var Postcode          : String?  = null,
-    @SerializedName("CountryID"         ) var CountryID         : Int?     = null,
-    @SerializedName("Country"           ) var Country           : Country? = Country(),
-    @SerializedName("Latitude"          ) var Latitude          : Double?  = null,
-    @SerializedName("Longitude"         ) var Longitude         : Double?  = null,
-    @SerializedName("ContactTelephone1" ) var ContactTelephone1 : String?  = null,
-    @SerializedName("ContactTelephone2" ) var ContactTelephone2 : String?  = null,
-    @SerializedName("ContactEmail"      ) var ContactEmail      : String?  = null,
-  //@SerializedName("AccessComments"    ) var AccessComments    : String?  = null,
-    @SerializedName("RelatedURL"        ) var RelatedURL        : String?  = null,
-    @SerializedName("Distance"          ) var Distance          : String?  = null,
-    @SerializedName("DistanceUnit"      ) var DistanceUnit      : Int?     = null
+    val ID: Int?,
+    val description: String?,
+    val AddressLine1: String?,
+    val AddressLine2: String?,
+    val Town: String?,
+    val StateOrProvince: String?,
+    val Postcode: String?,
+    val CountryID: Int?,
+    //val Country           : Country? = Country(),
+    val Latitude: Double?,
+    val Longitude: Double?,
+    val ContactTelephone1: String?,
+    val ContactTelephone2: String?,
+    val ContactEmail: String?,
+    //val AccessComments    : String?  ,
+    val RelatedURL: String?,
+    val Distance: String?,
+    val DistanceUnit: Int?
 
 )

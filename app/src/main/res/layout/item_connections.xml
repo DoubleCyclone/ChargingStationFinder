@@ -9,7 +9,7 @@
             type="com.project.chargingstationfinder.viewmodel.DetailsViewModel" />
         <variable
             name="connection"
-            type="com.project.chargingstationfinder.json.Connections" />
+            type="com.project.chargingstationfinder.database.entities.Connections" />
     </data>
 
     <androidx.cardview.widget.CardView

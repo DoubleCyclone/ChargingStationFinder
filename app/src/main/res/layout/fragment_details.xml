@@ -10,7 +10,7 @@
 
         <variable
             name="connection"
-            type="com.project.chargingstationfinder.json.Connections" />
+            type="com.project.chargingstationfinder.database.entities.Connections" />
     </data>
 
     <FrameLayout

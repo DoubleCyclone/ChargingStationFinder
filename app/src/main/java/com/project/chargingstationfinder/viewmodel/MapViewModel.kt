@@ -10,6 +10,7 @@ import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
+import com.project.chargingstationfinder.util.ApiException
 import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.util.Coroutines
 import com.project.chargingstationfinder.util.PreferenceProvider
@@ -39,14 +40,15 @@ class MapViewModel(
     }
 
     private fun getStations() {
-        try {
-            generalListener?.onStarted("Station Info Collection Started")
-            if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
-                generalListener?.onFailure("Country code or Location is Invalid")
-                return
-            }
-            Coroutines.main {
-                val response = repository.getChargingStations(
+
+        generalListener?.onStarted("Station Info Collection Started")
+        if (countryCode.isEmpty() || latitude.isNaN() || longitude.isNaN()) {
+            generalListener?.onFailure("Country code or Location is Invalid")
+            return
+        }
+        Coroutines.main {
+            try {
+                val mapResponse = repository.getChargingStations(
                     countryCode,
                     latitude,
                     longitude,
@@ -54,39 +56,34 @@ class MapViewModel(
                     2,
                     Constant.apiKey
                 )
-                if (response.isSuccessful) {
-                    val chargingStationList =
-                        (response.body())!! // @TODO USES THE ONE IN THE JSON NOT THE ENTITY
-                    chargingStationList.forEach {
-                        if (it.StatusType?.IsOperational != null) {
-                            marker = hMap.addMarker(
-                                MarkerOptions()
-                                    .icon(
-                                        BitmapDescriptorFactory.defaultMarker(
-                                            if (it.StatusType?.IsOperational!!)
-                                                BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
-                                        )
+                val chargingStationList =
+                    (mapResponse) // @TODO USES THE ONE IN THE JSON NOT THE ENTITY (WILL BE SOLVED WHEN THE OBJECTS IN ENTITY PROBLEM IS SOLVED)
+                chargingStationList.forEach {
+                    if (it.StatusType?.IsOperational != null) {
+                        marker = hMap.addMarker(
+                            MarkerOptions()
+                                .icon(
+                                    BitmapDescriptorFactory.defaultMarker(
+                                        if (it.StatusType?.IsOperational!!)
+                                            BitmapDescriptorFactory.HUE_GREEN else BitmapDescriptorFactory.HUE_RED
                                     )
-                                    .title(it.AddressInfo?.AddressLine1 ?: "unknown")
-                                    .position(
-                                        LatLng(
-                                            it.AddressInfo?.Latitude ?: 0.0,
-                                            it.AddressInfo?.Longitude ?: 0.0
-                                        )
+                                )
+                                .title(it.AddressInfo?.AddressLine1 ?: "unknown")
+                                .position(
+                                    LatLng(
+                                        it.AddressInfo?.Latitude ?: 0.0,
+                                        it.AddressInfo?.Longitude ?: 0.0
                                     )
-                            )
-                        }
+                                )
+                        )
                     }
-                    generalListener?.onSuccess(response.body().toString(), null)
-                } else {
-                    generalListener?.onFailure("Error Code : ${response.code()}")
+                    //println(it.Connections.toString())
                 }
+                generalListener?.onSuccess(mapResponse.toString(), null)
+            } catch (e: ApiException) {
+                generalListener?.onFailure(e.message!!)
             }
-
-        } catch (e: java.lang.Exception) {
-            generalListener?.onFailure(e.message!!)
         }
-
     }
 
     fun onMapReady(huaweiMap: HuaweiMap) {

@@ -3,7 +3,7 @@ package com.project.chargingstationfinder.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.project.chargingstationfinder.json.Connections
+import com.project.chargingstationfinder.database.entities.Connections
 
 class DetailsViewModel : ViewModel(){
 
