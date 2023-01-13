@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         viewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.mainViewModel = viewModel
+        //binding.mainViewModel = viewModel
         binding.lifecycleOwner = this
 
         val navHostFragment =
