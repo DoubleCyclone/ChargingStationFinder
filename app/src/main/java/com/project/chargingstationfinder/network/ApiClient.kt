@@ -1,7 +1,7 @@
-package com.project.chargingstationfinder.repository
+package com.project.chargingstationfinder.network
 
 import com.project.chargingstationfinder.util.Constant
-import com.project.chargingstationfinder.responses.ChargingStation
+import com.project.chargingstationfinder.json.ChargingStation
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

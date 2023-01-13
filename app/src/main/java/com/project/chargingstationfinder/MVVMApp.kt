@@ -2,7 +2,7 @@ package com.project.chargingstationfinder
 
 import android.app.Application
 import com.project.chargingstationfinder.factory.*
-import com.project.chargingstationfinder.repository.ApiClient
+import com.project.chargingstationfinder.network.ApiClient
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.util.PreferenceProvider
 import org.kodein.di.Kodein

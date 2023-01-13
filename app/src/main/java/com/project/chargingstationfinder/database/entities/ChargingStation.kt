@@ -2,7 +2,6 @@ package com.project.chargingstationfinder.database.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.project.chargingstationfinder.responses.*
 
 @Entity
 data class ChargingStation(

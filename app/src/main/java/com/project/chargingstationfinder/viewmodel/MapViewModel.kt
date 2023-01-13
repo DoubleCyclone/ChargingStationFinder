@@ -2,8 +2,6 @@ package com.project.chargingstationfinder.viewmodel
 
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.huawei.hms.maps.CameraUpdate
 import com.huawei.hms.maps.CameraUpdateFactory
@@ -12,7 +10,6 @@ import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
-import com.project.chargingstationfinder.responses.ChargingStation
 import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.MapFragment

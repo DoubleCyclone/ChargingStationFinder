@@ -6,27 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
 import com.project.chargingstationfinder.factory.DetailsViewModelFactory
-import com.project.chargingstationfinder.factory.SearchViewModelFactory
-import com.project.chargingstationfinder.interfaces.GeneralListener
-import com.project.chargingstationfinder.responses.Connections
+import com.project.chargingstationfinder.json.Connections
 import com.project.chargingstationfinder.util.ConnectionsItem
-import com.project.chargingstationfinder.util.hide
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.viewmodel.DetailsViewModel
 import com.xwray.groupie.GroupAdapter
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
-import com.xwray.groupie.viewbinding.GroupieViewHolder
 
 class DetailsFragment : Fragment(), KodeinAware {
 
