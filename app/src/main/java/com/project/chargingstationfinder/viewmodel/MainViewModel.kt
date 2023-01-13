@@ -18,7 +18,7 @@ class MainViewModel : ViewModel() {
 
     fun logOut() {
         AGConnectAuth.getInstance().signOut()
-        navController.navigate(R.id.loginFragment)
+        navController.navigate(R.id.Login)
     }
 
     fun permissions(view : MainActivity) {

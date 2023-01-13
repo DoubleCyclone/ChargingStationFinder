@@ -1,6 +1,5 @@
 package com.project.chargingstationfinder.viewmodel
 
-import SharedPreferencesHelper
 import android.util.Log
 import androidx.constraintlayout.widget.StateSet
 import androidx.lifecycle.LiveData
@@ -15,16 +14,14 @@ import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.responses.ChargingStation
 import com.project.chargingstationfinder.util.Constant
+import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.MapFragment
 
 class MapViewModel(
-    private val repository : MapRepository
+    private val repository : MapRepository,
+    prefs : PreferenceProvider
 ) :
     ViewModel(){
-
-    private var _chargingStationsLiveData = MutableLiveData<List<ChargingStation>>()
-    val chargingStationLiveData: LiveData<List<ChargingStation>>
-        get() = _chargingStationsLiveData
 
     var generalListener: GeneralListener? = null
 
@@ -32,10 +29,10 @@ class MapViewModel(
     private lateinit var marker: Marker
     private lateinit var cameraUpdate: CameraUpdate
     private lateinit var cameraPosition: CameraPosition
-    private val radius = SharedPreferencesHelper.getInt("radius")
-    private val countryCode = SharedPreferencesHelper.getString("countryCode")
-    private val latitude = SharedPreferencesHelper.getFloat("latitude")
-    private val longitude = SharedPreferencesHelper.getFloat("longitude")
+    private val radius = prefs.getInt("radius")
+    private val countryCode = prefs.getString("countryCode")
+    private val latitude = prefs.getFloat("latitude")
+    private val longitude = prefs.getFloat("longitude")
 
     fun initializeMap(view: MapFragment) {
         // Initialize the SDK.

@@ -1,6 +1,5 @@
 package com.project.chargingstationfinder.viewmodel
 
-import SharedPreferencesHelper
 import android.location.Location
 import android.os.Looper
 import android.util.Log
@@ -11,16 +10,20 @@ import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.SearchFragment
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val prefs: PreferenceProvider
+) : ViewModel() {
 
     var generalListener: GeneralListener? = null
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var mLocationRequest = LocationRequest()
     private lateinit var mLocationCallback: LocationCallback
-    private var radius: Int = 10 // default shouldn't be zero as if the location button is clicked before putting in the distance, it shows no stations as the radius is 0
+    private var radius: Int =
+        10 // default shouldn't be zero as if the location button is clicked before putting in the distance, it shows no stations as the radius is 0
     private var countryCode: String = ""
 
     fun initializeLocationReq(view: SearchFragment) {
@@ -138,15 +141,9 @@ class SearchViewModel : ViewModel() {
     }
 
     fun putVariables(view: SearchFragment) {
-        SharedPreferencesHelper.putInt("radius", radius)
-        SharedPreferencesHelper.putString("countryCode", countryCode)
-        SharedPreferencesHelper.putFloat(
-            "latitude",
-            view.binding.latitudeNumberTv.text.toString().toFloat()
-        )
-        SharedPreferencesHelper.putFloat(
-            "longitude",
-            view.binding.longitudeNumberTv.text.toString().toFloat()
-        )
+        prefs.putInt("radius", radius)
+        prefs.putString("countryCode", countryCode)
+        prefs.putFloat("latitude", view.binding.latitudeNumberTv.text.toString().toFloat())
+        prefs.putFloat("longitude", view.binding.longitudeNumberTv.text.toString().toFloat())
     }
 }

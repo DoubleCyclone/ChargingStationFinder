@@ -1,12 +1,10 @@
 package com.project.chargingstationfinder
 
 import android.app.Application
-import com.project.chargingstationfinder.factory.LoginViewModelFactory
-import com.project.chargingstationfinder.factory.MainViewModelFactory
+import com.project.chargingstationfinder.factory.*
 import com.project.chargingstationfinder.repository.ApiClient
 import com.project.chargingstationfinder.repository.MapRepository
-import com.project.chargingstationfinder.factory.MapViewModelFactory
-import com.project.chargingstationfinder.factory.SearchViewModelFactory
+import com.project.chargingstationfinder.util.PreferenceProvider
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -22,9 +20,11 @@ class MVVMApp : Application(), KodeinAware {
 
         bind() from singleton { ApiClient() }
         bind() from singleton { MapRepository(instance()) }
-        bind() from provider { MapViewModelFactory(instance()) }
+        bind() from singleton { PreferenceProvider(instance()) }
+        bind() from provider { MapViewModelFactory(instance(),instance()) }
         bind() from provider { MainViewModelFactory() }
         bind() from provider { LoginViewModelFactory() }
-        bind() from provider { SearchViewModelFactory() }
+        bind() from provider { SearchViewModelFactory(instance()) }
+        bind() from provider { DetailsViewModelFactory() }
     }
 }

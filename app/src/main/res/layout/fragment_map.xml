@@ -21,6 +21,15 @@
             map:uiCompass="true"
             map:uiZoomControls="true" />
 
+        <Button
+            android:id="@+id/toDetailsBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TO DETAILS"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <ProgressBar
             android:id="@+id/mapPb"
             android:layout_width="wrap_content"

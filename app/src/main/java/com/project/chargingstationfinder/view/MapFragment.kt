@@ -56,16 +56,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, GeneralListener, KodeinAware
         mMapView.onCreate(mapViewBundle)
         mMapView.getMapAsync(this)
 
-        //viewModel.chargingStationLiveData.observe(viewLifecycleOwner) {}
-
         setListeners()
     }
 
-    // TODO: Not yet implemented
     private fun setListeners() {
+        binding.toDetailsBtn.setOnClickListener {
+            mapToDetails()
+        }
     }
 
-    // TODO: Not yet implemented 
     private fun mapToDetails() {
         findNavController().navigate(R.id.action_mapFragment_to_detailsFragment)
     }

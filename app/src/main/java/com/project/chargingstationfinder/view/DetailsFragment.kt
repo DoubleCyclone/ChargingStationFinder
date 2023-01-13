@@ -7,22 +7,31 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
+import com.project.chargingstationfinder.factory.DetailsViewModelFactory
 import com.project.chargingstationfinder.factory.SearchViewModelFactory
 import com.project.chargingstationfinder.interfaces.GeneralListener
+import com.project.chargingstationfinder.responses.Connections
+import com.project.chargingstationfinder.util.ConnectionsItem
+import com.project.chargingstationfinder.util.hide
+import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.viewmodel.DetailsViewModel
-import com.project.chargingstationfinder.viewmodel.SearchViewModel
+import com.xwray.groupie.GroupAdapter
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
+import com.xwray.groupie.viewbinding.GroupieViewHolder
 
-class DetailsFragment : Fragment(), GeneralListener, KodeinAware {
+class DetailsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
-    private val factory: SearchViewModelFactory by instance()
+    private val factory: DetailsViewModelFactory by instance()
 
     private lateinit var viewModel: DetailsViewModel
     private lateinit var binding: FragmentDetailsBinding
@@ -33,7 +42,6 @@ class DetailsFragment : Fragment(), GeneralListener, KodeinAware {
     ): View {
         // Inflate the layout for this fragment
         viewModel = ViewModelProvider(this,factory)[DetailsViewModel::class.java]
-        viewModel.generalListener = this
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_details,container,false)
         binding.detailsViewModel = viewModel
         binding.lifecycleOwner = this
@@ -42,28 +50,40 @@ class DetailsFragment : Fragment(), GeneralListener, KodeinAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bindUI()
         setListeners()
     }
 
-    private fun setListeners() {
-        binding.toMapbtn2.setOnClickListener{
-            detailsToMap()
+    private fun bindUI(){
+        binding.detailsPb.show()
+        /*viewModel.connectionsLiveData.observe(viewLifecycleOwner, Observer {
+            binding.detailsPb.hide()
+            initRecyclerView(it.toConnectionsItem())
+        })*/
+    }
+
+    private fun initRecyclerView(connectionsItem: List<ConnectionsItem>) {
+        val mAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>().apply {
+            addAll(connectionsItem)
         }
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = mAdapter
+        }
+    }
+
+    private fun List<Connections>.toConnectionsItem() : List<ConnectionsItem>{
+        return this.map {
+            ConnectionsItem(it)
+        }
+    }
+
+    private fun setListeners() {
     }
 
     private fun detailsToMap() {
         findNavController().navigate(R.id.action_detailsFragment_to_mapFragment)
-    }
-
-    override fun onStarted(message: String) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
-        TODO("Not yet implemented")
-    }
-
-    override fun onFailure(message: String) {
-        TODO("Not yet implemented")
     }
 }

@@ -1,22 +1,18 @@
 package com.project.chargingstationfinder.view
 
-import SharedPreferencesHelper
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.navigation.fragment.NavHostFragment
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.ActivityMainBinding
 import com.project.chargingstationfinder.factory.MainViewModelFactory
-import com.project.chargingstationfinder.factory.MapViewModelFactory
 import com.project.chargingstationfinder.viewmodel.MainViewModel
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.kodein
-import org.kodein.di.android.x.kodein
 import org.kodein.di.generic.instance
 
 class MainActivity : AppCompatActivity(), KodeinAware {
@@ -41,7 +37,7 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
         supportActionBar?.title = getString(R.string.student_id)
 
-        SharedPreferencesHelper.init(this)
+        //SharedPreferencesHelper.init(this)
         viewModel.permissions(this)
     }
 
