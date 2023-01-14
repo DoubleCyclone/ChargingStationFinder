@@ -18,6 +18,9 @@
     <string name="zero">0.0</string>
     <string name="gpsBtn">GPS Button</string>
     <string name="distanceTvHint">Distance (km) (Default = 10)</string>
+    <string name="location_details">Location Details</string>
+    <string name="address">Address</string>
+    <string name="to_details">TO DETAILS</string>
 
 
     <string-array name="countries_array">
