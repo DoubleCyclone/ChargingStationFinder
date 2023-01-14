@@ -16,10 +16,7 @@ import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
 import com.project.chargingstationfinder.factory.DetailsViewModelFactory
 import com.project.chargingstationfinder.database.entities.Connections
 import com.project.chargingstationfinder.factory.MapViewModelFactory
-import com.project.chargingstationfinder.util.ChargingStationItem
-import com.project.chargingstationfinder.util.ConnectionsItem
-import com.project.chargingstationfinder.util.Coroutines
-import com.project.chargingstationfinder.util.show
+import com.project.chargingstationfinder.util.*
 import com.project.chargingstationfinder.viewmodel.DetailsViewModel
 import com.project.chargingstationfinder.viewmodel.MapViewModel
 import com.xwray.groupie.GroupAdapter
@@ -40,8 +37,8 @@ class DetailsFragment : Fragment(), KodeinAware {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(this,factory)[MapViewModel::class.java]
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_details,container,false)
+        viewModel = ViewModelProvider(this, factory)[MapViewModel::class.java]
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_details, container, false)
         binding.detailsViewModel = viewModel
         binding.lifecycleOwner = this
         return binding.root
@@ -56,13 +53,15 @@ class DetailsFragment : Fragment(), KodeinAware {
 
     private fun bindUI() = Coroutines.main{
         binding.detailsPb.show()
-        /*viewModel.connectionsLiveData.observe(viewLifecycleOwner, Observer {
+
+        viewModel.chargingStations.await().observe(viewLifecycleOwner, Observer {
             binding.detailsPb.hide()
-            initRecyclerView(it.toConnectionsItem())
-        })*/
-        /*viewModel.chargingStations.await().observe(viewLifecycleOwner, Observer {
-            initRecyclerView()
-        })*/
+            initRecyclerView(it.toChargingStationItem())
+        })
+
+        /*initRecyclerView(viewModel.chargingStations.toChargingStationItem())
+        println(viewModel.chargingStations.size)*/
+
 
     }
 
@@ -88,7 +87,7 @@ class DetailsFragment : Fragment(), KodeinAware {
         }
     }
 
-    private fun List<ChargingStation>.toChargingStationItem() : List<ChargingStationItem>{
+    private fun List<ChargingStation>.toChargingStationItem(): List<ChargingStationItem> {
         return this.map {
             ChargingStationItem(it)
         }

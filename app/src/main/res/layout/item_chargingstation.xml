@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:gravity="center"
-                android:text="2"
+                android:text="@{chargingStation.component5().addressLine1}"
                 android:textSize="24sp"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"

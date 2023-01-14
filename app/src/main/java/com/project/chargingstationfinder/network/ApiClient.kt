@@ -22,6 +22,9 @@ interface ApiClient {
         @Query("key") apiKey: String
     ): Response<List<ChargingStation>>
 
+    @GET("chargingStations")
+    suspend fun getChargingStations() : Response<ChargingStationsResponse>
+
     companion object {
         operator fun invoke(
             networkConnectionInterceptor: NetworkConnectionInterceptor

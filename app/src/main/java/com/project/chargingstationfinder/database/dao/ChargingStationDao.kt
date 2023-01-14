@@ -13,7 +13,10 @@ interface ChargingStationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(chargingStation: ChargingStation)
 
-    @Query("SELECT * FROM ChargingStation")
+    @Query("SELECT * FROM ChargingStation") // idk
     fun getChargingStation() : LiveData<ChargingStation>
+
+    @Query("SELECT * FROM ChargingStation")
+    fun getChargingStations() : LiveData<List<ChargingStation>>
 
 }

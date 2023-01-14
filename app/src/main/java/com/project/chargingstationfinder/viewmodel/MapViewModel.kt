@@ -8,10 +8,13 @@ import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
+import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.util.*
 import com.project.chargingstationfinder.view.MapFragment
+
+
 
 class MapViewModel(
     private val repository: MapRepository,
@@ -30,6 +33,9 @@ class MapViewModel(
     private val latitude = prefs.getFloat("latitude")
     private val longitude = prefs.getFloat("longitude")
 
+    val chargingStations by lazyDeferred {
+        repository.getChargingStations()
+    }
 
     fun initializeMap(view: MapFragment) {
         // Initialize the SDK.
@@ -72,12 +78,12 @@ class MapViewModel(
                                     )
                                 )
                         )
-                        repository.saveChargingStation(it)
+                        //repository.saveChargingStation(it)
                     }
+                    repository.getChargingStations()
                     println(it.Connections.toString())
                     println(it.AddressInfo?.AddressLine1.toString() + it.AddressInfo?.AddressLine2.toString())
                 }
-
                 generalListener?.onSuccess("Charging Station Info Collection Success", null)
             } catch (e: ApiException) {
                 generalListener?.onFailure(e.message!!)

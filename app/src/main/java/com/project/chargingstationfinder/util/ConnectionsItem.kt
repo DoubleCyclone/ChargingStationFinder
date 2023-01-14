@@ -2,9 +2,9 @@ package com.project.chargingstationfinder.util
 
 import android.view.View
 import com.project.chargingstationfinder.R
-import com.project.chargingstationfinder.databinding.ItemConnectionsBinding
 import com.project.chargingstationfinder.database.entities.Connections
-import com.xwray.groupie.viewbinding.BindableItem
+import com.project.chargingstationfinder.databinding.ItemConnectionsBinding
+import com.xwray.groupie.databinding.BindableItem
 
 class ConnectionsItem(
     private val connections : Connections
@@ -16,7 +16,4 @@ class ConnectionsItem(
 
     override fun getLayout() = R.layout.item_connections
 
-    override fun initializeViewBinding(view: View): ItemConnectionsBinding {
-        TODO("Not yet implemented")
-    }
 }
