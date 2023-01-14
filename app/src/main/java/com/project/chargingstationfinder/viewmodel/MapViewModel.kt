@@ -8,12 +8,10 @@ import com.huawei.hms.maps.CameraUpdateFactory
 import com.huawei.hms.maps.HuaweiMap
 import com.huawei.hms.maps.MapsInitializer
 import com.huawei.hms.maps.model.*
-import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.repository.MapRepository
 import com.project.chargingstationfinder.util.*
 import com.project.chargingstationfinder.view.MapFragment
-
 
 
 class MapViewModel(

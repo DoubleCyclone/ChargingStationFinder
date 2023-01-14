@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
-import com.project.chargingstationfinder.factory.DetailsViewModelFactory
-import com.project.chargingstationfinder.database.entities.Connections
 import com.project.chargingstationfinder.factory.MapViewModelFactory
-import com.project.chargingstationfinder.util.*
-import com.project.chargingstationfinder.viewmodel.DetailsViewModel
+import com.project.chargingstationfinder.util.ChargingStationItem
+import com.project.chargingstationfinder.util.Coroutines
+import com.project.chargingstationfinder.util.hide
+import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.viewmodel.MapViewModel
 import com.xwray.groupie.GroupAdapter
 import org.kodein.di.KodeinAware
@@ -54,27 +53,11 @@ class DetailsFragment : Fragment(), KodeinAware {
     private fun bindUI() = Coroutines.main{
         binding.detailsPb.show()
 
-        viewModel.chargingStations.await().observe(viewLifecycleOwner, Observer {
+        viewModel.chargingStations.await().observe(viewLifecycleOwner) {
             binding.detailsPb.hide()
             initRecyclerView(it.toChargingStationItem())
-        })
-
-        /*initRecyclerView(viewModel.chargingStations.toChargingStationItem())
-        println(viewModel.chargingStations.size)*/
-
-
+        }
     }
-
-    /*private fun initRecyclerView(connectionsItem: List<ConnectionsItem>) {
-        val mAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>().apply {
-            addAll(connectionsItem)
-        }
-        binding.recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            adapter = mAdapter
-        }
-    }*/
 
     private fun initRecyclerView(chargingStationItem: List<ChargingStationItem>) {
         val mAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>().apply {
@@ -92,12 +75,6 @@ class DetailsFragment : Fragment(), KodeinAware {
             ChargingStationItem(it)
         }
     }
-
-    /*private fun List<Connections>.toConnectionsItem() : List<ConnectionsItem>{
-        return this.map {
-            ConnectionsItem(it)
-        }
-    }*/
 
     private fun setListeners() {
     }

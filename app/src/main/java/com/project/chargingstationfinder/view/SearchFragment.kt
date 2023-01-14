@@ -9,12 +9,10 @@ import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.huawei.agconnect.auth.AGConnectAuth
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentSearchBinding
-import com.project.chargingstationfinder.factory.LoginViewModelFactory
 import com.project.chargingstationfinder.factory.SearchViewModelFactory
 import com.project.chargingstationfinder.interfaces.GeneralListener
 import com.project.chargingstationfinder.util.hide
@@ -96,9 +94,9 @@ class SearchFragment : Fragment(), GeneralListener, KodeinAware {
 
     override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
         binding.searchPb.hide()
-        generalResponse?.observe(this, Observer {
+        generalResponse?.observe(this) {
             activity?.toast(it)
-        }) ?: run {
+        } ?: run {
             activity?.toast(message)
         }
     }

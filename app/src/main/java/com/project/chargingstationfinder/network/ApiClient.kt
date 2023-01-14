@@ -1,9 +1,8 @@
 package com.project.chargingstationfinder.network
 
-import com.project.chargingstationfinder.util.Constant
 import com.project.chargingstationfinder.database.entities.ChargingStation
+import com.project.chargingstationfinder.util.Constant
 import okhttp3.OkHttpClient
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

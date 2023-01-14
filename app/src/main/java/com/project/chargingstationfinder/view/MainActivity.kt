@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
         viewModel = ViewModelProvider(this,factory)[MainViewModel::class.java]
         val binding: ActivityMainBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_main)
-        //binding.mainViewModel = viewModel
         binding.lifecycleOwner = this
 
         val navHostFragment =
@@ -37,7 +36,6 @@ class MainActivity : AppCompatActivity(), KodeinAware {
 
         supportActionBar?.title = getString(R.string.student_id)
 
-        //SharedPreferencesHelper.init(this)
         viewModel.permissions(this)
     }
 

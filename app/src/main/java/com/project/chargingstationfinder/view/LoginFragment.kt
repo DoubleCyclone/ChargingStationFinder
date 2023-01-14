@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.databinding.FragmentLoginBinding
@@ -66,10 +65,10 @@ class LoginFragment : Fragment(), GeneralListener, KodeinAware {
     }
 
     override fun onSuccess(message: String, generalResponse: LiveData<String>?) {
-        generalResponse?.observe(this, Observer {
+        generalResponse?.observe(this) {
             binding.loginPb.hide()
             activity?.toast(it)
-        }) ?: run {
+        } ?: run {
             binding.loginPb.hide()
             activity?.toast(message)
         }

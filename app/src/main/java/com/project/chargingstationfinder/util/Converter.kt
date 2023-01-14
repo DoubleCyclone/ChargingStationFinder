@@ -1,6 +1,5 @@
 package com.project.chargingstationfinder.util
 
-import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.project.chargingstationfinder.database.entities.AddressInfo

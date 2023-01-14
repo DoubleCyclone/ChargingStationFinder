@@ -2,22 +2,12 @@ package com.project.chargingstationfinder.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.huawei.hms.maps.HuaweiMap
-import com.huawei.hms.maps.model.BitmapDescriptorFactory
-import com.huawei.hms.maps.model.LatLng
-import com.huawei.hms.maps.model.Marker
-import com.huawei.hms.maps.model.MarkerOptions
 import com.project.chargingstationfinder.database.AppDatabase
 import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.network.ApiClient
 import com.project.chargingstationfinder.network.SafeApiRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.lang.Exception
-import java.time.LocalDateTime
 
 class MapRepository(
     private val api: ApiClient,

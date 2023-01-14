@@ -29,6 +29,5 @@ class MVVMApp : Application(), KodeinAware {
         bind() from provider { MainViewModelFactory() }
         bind() from provider { LoginViewModelFactory() }
         bind() from provider { SearchViewModelFactory(instance()) }
-        bind() from provider { DetailsViewModelFactory() }
     }
 }

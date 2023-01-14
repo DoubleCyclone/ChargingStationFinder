@@ -10,7 +10,6 @@ import com.huawei.hms.location.*
 import com.huawei.hms.support.api.location.common.HMSLocationLog
 import com.project.chargingstationfinder.R
 import com.project.chargingstationfinder.interfaces.GeneralListener
-import com.project.chargingstationfinder.util.NoInternetException
 import com.project.chargingstationfinder.util.PreferenceProvider
 import com.project.chargingstationfinder.view.SearchFragment
 
