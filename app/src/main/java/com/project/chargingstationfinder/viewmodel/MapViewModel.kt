@@ -30,7 +30,6 @@ class MapViewModel(
     private val latitude = prefs.getFloat("latitude")
     private val longitude = prefs.getFloat("longitude")
 
-    //fun getChargingStation() = repository.getChargingStation()
 
     fun initializeMap(view: MapFragment) {
         // Initialize the SDK.
@@ -115,6 +114,7 @@ class MapViewModel(
             .tilt(2.5f).build()
         cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
         huaweiMap.moveCamera(cameraUpdate)
+
         getStations()
     }
 }

@@ -6,16 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.project.chargingstationfinder.R
+import com.project.chargingstationfinder.database.entities.ChargingStation
 import com.project.chargingstationfinder.databinding.FragmentDetailsBinding
 import com.project.chargingstationfinder.factory.DetailsViewModelFactory
 import com.project.chargingstationfinder.database.entities.Connections
+import com.project.chargingstationfinder.factory.MapViewModelFactory
+import com.project.chargingstationfinder.util.ChargingStationItem
 import com.project.chargingstationfinder.util.ConnectionsItem
+import com.project.chargingstationfinder.util.Coroutines
 import com.project.chargingstationfinder.util.show
 import com.project.chargingstationfinder.viewmodel.DetailsViewModel
+import com.project.chargingstationfinder.viewmodel.MapViewModel
 import com.xwray.groupie.GroupAdapter
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
@@ -24,9 +30,9 @@ import org.kodein.di.generic.instance
 class DetailsFragment : Fragment(), KodeinAware {
 
     override val kodein by kodein()
-    private val factory: DetailsViewModelFactory by instance()
+    private val factory: MapViewModelFactory by instance()
 
-    private lateinit var viewModel: DetailsViewModel
+    private lateinit var viewModel: MapViewModel
     private lateinit var binding: FragmentDetailsBinding
 
     override fun onCreateView(
@@ -34,7 +40,7 @@ class DetailsFragment : Fragment(), KodeinAware {
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
-        viewModel = ViewModelProvider(this,factory)[DetailsViewModel::class.java]
+        viewModel = ViewModelProvider(this,factory)[MapViewModel::class.java]
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_details,container,false)
         binding.detailsViewModel = viewModel
         binding.lifecycleOwner = this
@@ -48,15 +54,19 @@ class DetailsFragment : Fragment(), KodeinAware {
         setListeners()
     }
 
-    private fun bindUI(){
+    private fun bindUI() = Coroutines.main{
         binding.detailsPb.show()
         /*viewModel.connectionsLiveData.observe(viewLifecycleOwner, Observer {
             binding.detailsPb.hide()
             initRecyclerView(it.toConnectionsItem())
         })*/
+        /*viewModel.chargingStations.await().observe(viewLifecycleOwner, Observer {
+            initRecyclerView()
+        })*/
+
     }
 
-    private fun initRecyclerView(connectionsItem: List<ConnectionsItem>) {
+    /*private fun initRecyclerView(connectionsItem: List<ConnectionsItem>) {
         val mAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>().apply {
             addAll(connectionsItem)
         }
@@ -65,13 +75,30 @@ class DetailsFragment : Fragment(), KodeinAware {
             setHasFixedSize(true)
             adapter = mAdapter
         }
+    }*/
+
+    private fun initRecyclerView(chargingStationItem: List<ChargingStationItem>) {
+        val mAdapter = GroupAdapter<com.xwray.groupie.GroupieViewHolder>().apply {
+            addAll(chargingStationItem)
+        }
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            adapter = mAdapter
+        }
     }
 
-    private fun List<Connections>.toConnectionsItem() : List<ConnectionsItem>{
+    private fun List<ChargingStation>.toChargingStationItem() : List<ChargingStationItem>{
+        return this.map {
+            ChargingStationItem(it)
+        }
+    }
+
+    /*private fun List<Connections>.toConnectionsItem() : List<ConnectionsItem>{
         return this.map {
             ConnectionsItem(it)
         }
-    }
+    }*/
 
     private fun setListeners() {
     }
