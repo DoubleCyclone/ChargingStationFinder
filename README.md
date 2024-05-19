@@ -1,5 +1,7 @@
 # ChargingStationFinder
-project
+
+An app made to show electric car charging stations around your location.
+Uses Huawei Mobile Services, coded in Kotlin.
 
 MAKE SURE THE LOCATION IS ON BEFORE USING!
 For some reason the addresses(details) tab didn't load on a slow huawei phone that i tested this on. It does load on my non-huawei faster phone.
